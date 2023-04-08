@@ -17,14 +17,14 @@
         android:fontFamily="@font/titan_one"
         android:text=" ROOMMATE\n  SHOPPING"
         android:textColor="#FFFFFF"
-        android:textSize="60dp" />
+        android:textSize="48dp" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/mainRegister"
         android:layout_width="247dp"
         android:layout_height="75dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:backgroundTint="#7381c7"
         android:gravity="center"
         android:text="register"
@@ -32,22 +32,22 @@
         app:cornerRadius="50dp" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/mainLogin"
         android:layout_width="247dp"
         android:layout_height="75dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:backgroundTint="#7381c7"
         android:text="log in"
         android:textSize="20sp"
         app:cornerRadius="50dp" />
 
     <Button
-        android:id="@+id/exit"
+        android:id="@+id/mainExit"
         android:layout_width="247dp"
         android:layout_height="75dp"
         android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:backgroundTint="#7381c7"
         android:text="Exit"
         android:textSize="20sp"

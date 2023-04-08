@@ -47,9 +47,9 @@ public class SplashFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // reference to the corresponding button
-        login = view.findViewById(R.id.login);
-        register = view.findViewById(R.id.register);
-        exit = view.findViewById(R.id.exit);
+        login = view.findViewById(R.id.mainLogin);
+        register = view.findViewById(R.id.mainRegister);
+        exit = view.findViewById(R.id.mainExit);
 
         // set up the login button
         loginButton();
@@ -75,7 +75,7 @@ public class SplashFragment extends Fragment {
      */
     private void registerButton() {
         register.setOnClickListener(e -> {
-
+            changeFragment(new RegisterFragment());
         });
     }
 

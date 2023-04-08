@@ -2,12 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
     android:orientation="vertical"
-    tools:context=".LoginFragment">
+    android:background="@drawable/gradient"
+    tools:context=".RegisterFragment">
 
     <TextView
         android:id="@+id/textView4"
@@ -15,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
-        android:text="Authorzation"
+        android:text="Register"
         android:textColor="#FFFFFF"
         android:textSize="34sp" />
 
@@ -24,16 +23,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="51dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="60dp"
         android:text="User name: "
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/loginUserName"
+        android:id="@+id/registerUserName"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:textColor="#FFFFFF"
         android:layout_gravity="center_horizontal"
         android:ems="10"
         android:hint="User name"
@@ -44,14 +42,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="51dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Password:"
         android:textAlignment="viewStart"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/loginPassword"
+        android:id="@+id/registerPassword"
         android:layout_width="300dp"
         android:layout_height="48dp"
         android:layout_gravity="center_horizontal"
@@ -59,26 +57,45 @@
         android:hint="Password"
         android:inputType="textPassword" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="51dp"
+        android:layout_marginTop="20dp"
+        android:text="Confirm password:"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/registerComfirmPassword"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:ems="10"
+        android:hint="Comfirm password"
+        android:inputType="textPassword" />
+
     <Button
-        android:id="@+id/loginLogin"
+        android:id="@+id/registerSignup"
         android:layout_width="247dp"
         android:layout_height="75dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="80dp"
         android:backgroundTint="#7381c7"
-        android:text="Log in"
+        android:text="Sign up"
         android:textSize="20sp"
         app:cornerRadius="50dp" />
 
     <Button
-        android:id="@+id/loginBack"
+        android:id="@+id/registerBack"
+        app:cornerRadius="50dp"
         android:layout_width="247dp"
         android:layout_height="75dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:backgroundTint="#7381c7"
         android:text="Back"
-        android:textSize="20sp"
-        app:cornerRadius="50dp" />
+        android:textSize="20sp" />
 
 </LinearLayout>

@@ -13,42 +13,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class LoginFragment extends Fragment {
-    
-    Button login, back;
+public class RegisterFragment extends Fragment {
+
+        Button signup, back;
 
     /**
      * Required empty public constructor
      */
-    public LoginFragment() {
+    public RegisterFragment() {
 
     }
 
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-
+    // TODO: Rename and change types and number of parameters
+    public static RegisterFragment newInstance(String param1, String param2) {
+        RegisterFragment fragment = new RegisterFragment();;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        login = view.findViewById(R.id.loginLogin);
-        back = view.findViewById(R.id.loginBack);
+        signup = view.findViewById(R.id.registerSignup);
+        back = view.findViewById(R.id.registerBack);
+
         backButton();
 
     }
