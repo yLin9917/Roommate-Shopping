@@ -1,62 +1,37 @@
 package edu.uga.cs.roommateshopping;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity {
-
-    Button login, exit, register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // reference to the corresponding button
-        login = findViewById(R.id.login);
-        register = findViewById(R.id.register);
-        exit = findViewById(R.id.exit);
+        // init the splash fragment
+        changeFragment(new SplashFragment());
 
-        // set up the login button
-        loginButton();
-
-        // set up the register button
-        registerButton();
-
-        // set up the exit button
-        exitButton();
 
     }
 
     /**
-     * set up the login button
+     * change the framelayout's fragment
+     *
+     * @param fragment the new fragment
      */
-    private void loginButton() {
-        login.setOnClickListener(e -> {
-
-        });
-    }
-
-    /**
-     * set up the register button
-     */
-    private void registerButton() {
-        register.setOnClickListener(e -> {
-
-        });
-    }
-
-
-    /**
-     *  Set up the click listener for the exit button
-     */
-    private void exitButton() {
-        exit.setOnClickListener(e -> {
-            finish();
-            System.exit(0);
-        });
+    protected void changeFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.mainframelayout, fragment);
+        transaction.commit();
     }
 
 
