@@ -12,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class RegisterFragment extends Fragment {
 
         Button signup, back;
+        EditText regPassword, regComPassword;
 
     /**
      * Required empty public constructor
@@ -48,11 +51,33 @@ public class RegisterFragment extends Fragment {
 
         signup = view.findViewById(R.id.registerSignup);
         back = view.findViewById(R.id.registerBack);
+        regPassword = view.findViewById(R.id.registerPassword);
+        regComPassword = view.findViewById(R.id.registerComfirmPassword);
 
+        signupButton();
         backButton();
 
     }
 
+    /**
+     * set up the sign up button
+     */
+    private void signupButton() {
+        signup.setOnClickListener(e -> {
+            String pass = regPassword.getText().toString();
+            String cpass = regComPassword.getText().toString();
+            if(pass.equals(cpass) && pass.length() != 0){
+                Toast.makeText(getContext(),"Password matched",Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getContext(),"Password Not matching",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * set up the back button
+     */
     private void backButton() {
         back.setOnClickListener(e -> {
             changeFragment(new SplashFragment());

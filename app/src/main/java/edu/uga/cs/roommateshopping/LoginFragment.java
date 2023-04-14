@@ -71,4 +71,8 @@ public class LoginFragment extends Fragment {
         transaction.commit();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }
