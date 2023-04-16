@@ -1,5 +1,6 @@
 package edu.uga.cs.roommateshopping;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,20 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
-public class LoginFragment extends Fragment {
-    
-    Button login, back;
+public class loggedFragment extends Fragment {
 
-    /**
-     * Required empty public constructor
-     */
-    public LoginFragment() {
+    EditText user;
+    Button viewList, recentlyPurchased, logout;
 
+    public loggedFragment() {
+        // Required empty public constructor
     }
 
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
+    // TODO: Rename and change types and number of parameters
+    public static loggedFragment newInstance(String param1, String param2) {
+        loggedFragment fragment = new loggedFragment();
 
         return fragment;
     }
@@ -33,44 +34,59 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return inflater.inflate(R.layout.fragment_logged, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        login = view.findViewById(R.id.loginLogin);
-        back = view.findViewById(R.id.loginBack);
-        backButton();
-        loginButton();
+        viewList = view.findViewById(R.id.viewList);
+        viewListButton();
+
+        recentlyPurchased = view.findViewById(R.id.recentlyPurchased);
+        recentlyPurchasedButton();
+
+        logout = view.findViewById(R.id.logout);
+        logoutButton();
 
     }
 
     /**
      * set up the login button
      */
-    private void loginButton() {
-        login.setOnClickListener(e -> {
-            changeFragment(new loggedFragment());
+    private void viewListButton() {
+        viewList.setOnClickListener(e -> {
+            Intent intent = new Intent(this.getActivity(), toBuyActivity.class);
+            startActivity(intent);
+        });
+    }
+
+
+    /**
+     * set up the recentlyPurchased button
+     */
+    private void recentlyPurchasedButton() {
+        recentlyPurchased.setOnClickListener(e -> {
+
         });
     }
 
     /**
-     * set up the back button
+     * set up the logout button
      */
-    private void backButton() {
-        back.setOnClickListener(e -> {
+    private void logoutButton() {
+        logout.setOnClickListener(e -> {
             changeFragment(new SplashFragment());
         });
     }
+
 
     /**
      * change the framelayout's fragment
@@ -84,8 +100,4 @@ public class LoginFragment extends Fragment {
         transaction.commit();
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }
