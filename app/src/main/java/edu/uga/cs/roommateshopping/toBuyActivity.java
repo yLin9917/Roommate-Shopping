@@ -5,8 +5,6 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,17 +24,19 @@ public class toBuyActivity extends AppCompatActivity {
 
     private static final String TAG = "toBuyActivity";
 
+    TextView itemSelected;
     Button purcahsedButton;
     private static List<ToBuyItem> toBuyList;
     private RecyclerView recyclerView;
-    private toBuyListRecycleAdapter recycleAdapter;
+    private ToBuyListRecycleAdapter recycleAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_buy);
 
-        purcahsedButton = findViewById(R.id.purcahsedButton);
+        purcahsedButton = findViewById(R.id.purchaseButton);
+        itemSelected = findViewById(R.id.itemSelected);
         purcahsedButtonHandler();
 
         addButtonHandler();
@@ -51,7 +52,17 @@ public class toBuyActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.toBuyList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recycleAdapter = new toBuyListRecycleAdapter(this, toBuyList);
+        recycleAdapter = new ToBuyListRecycleAdapter(this, toBuyList);
+        recycleAdapter.setOnSelectedItemsChangedListener(new ToBuyListRecycleAdapter.OnSelectedItemsChangedListener() {
+            @Override
+            public void onSelectedItemsChanged(int count) {
+                if (recycleAdapter.getSelectedItems().toString().equals(""))
+                    itemSelected.setText("Selected item: 0");
+                else
+                    itemSelected.setText("Selected item: " + count);
+            }
+        });
+
         recyclerView.setAdapter(recycleAdapter);
 
     }
@@ -76,6 +87,9 @@ public class toBuyActivity extends AppCompatActivity {
         ImageButton addButton = findViewById(R.id.addButton);
 
         addButton.setOnClickListener(e -> {
+
+            n.setText("");
+            num.setText("");
 
             // create the popup window
             int width = LinearLayout.LayoutParams.WRAP_CONTENT;
