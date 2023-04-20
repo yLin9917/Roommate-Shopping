@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +43,16 @@ public class toBuyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_buy);
 
+        if (savedInstanceState != null) {
+            cartList = (List<ToBuyItem>) savedInstanceState.getSerializable("cartList");
+            toBuyList = (List<ToBuyItem>) savedInstanceState.getSerializable("toBuyList");
+        } else {
+            cartList = new ArrayList<>();
+            toBuyList = new ArrayList<>();
+            initList();
+        }
+
         // set up the adapter and recyclerview for the cartList
-        cartList = new ArrayList<>();
         cartListrecyclerView = findViewById(R.id.cartList);
         cartListrecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartListRecyclerAdapter = new CartListRecyclerAdapter(this, cartList);
@@ -56,19 +66,8 @@ public class toBuyActivity extends AppCompatActivity {
         addToCartButtonHandler();
 
 
-        ToBuyItem one = new ToBuyItem("item 1", 1);
-        ToBuyItem two = new ToBuyItem("item 2", 2);
-        ToBuyItem three = new ToBuyItem("item 3", 3);
-        toBuyList = new ArrayList<>();
-        toBuyList.add(one);
-        toBuyList.add(two);
-        toBuyList.add(three);
-        ToBuyItem four = new ToBuyItem("item 4", 1);
-        ToBuyItem five = new ToBuyItem("item 5", 2);
-        ToBuyItem six = new ToBuyItem("item 6", 3);
-        toBuyList.add(four);
-        toBuyList.add(five);
-        toBuyList.add(six);
+
+
 
         // set up the adapter and recyclerview for the toBuyList
         toBuyListrecyclerView = findViewById(R.id.toBuyList);
@@ -205,7 +204,9 @@ public class toBuyActivity extends AppCompatActivity {
         }
     };
 
-
+    /**
+     * by calling this method, it will update the selectedItem TextView
+     */
     private void itemSelectedUpdate() {
         int count = toBuyListRecycleAdapter.getSelectedItems().size();
         if (count == 0) {
@@ -215,5 +216,34 @@ public class toBuyActivity extends AppCompatActivity {
         }
     }
 
+    private void initList() {
+        ToBuyItem one = new ToBuyItem("item 1", 1);
+        ToBuyItem two = new ToBuyItem("item 2", 2);
+        ToBuyItem three = new ToBuyItem("item 3", 3);
+        toBuyList.add(one);
+        toBuyList.add(two);
+        toBuyList.add(three);
+        ToBuyItem four = new ToBuyItem("item 4", 1);
+        ToBuyItem five = new ToBuyItem("item 5", 2);
+        ToBuyItem six = new ToBuyItem("item 6", 3);
+        toBuyList.add(four);
+        toBuyList.add(five);
+        toBuyList.add(six);
+    }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("cartList", (Serializable) cartList);
+        outState.putSerializable("toBuyList", (Serializable) toBuyList);
+        Log.d("999999", String.valueOf(outState));
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        cartList = (List<ToBuyItem>) savedInstanceState.getSerializable("cartList");
+        toBuyList = (List<ToBuyItem>) savedInstanceState.getSerializable("toBuyList");
+    }
 }
