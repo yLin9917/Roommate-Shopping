@@ -45,7 +45,7 @@
                 android:visibility="visible" />
 
             <Button
-                android:id="@+id/purchaseButton"
+                android:id="@+id/addToCartButton"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

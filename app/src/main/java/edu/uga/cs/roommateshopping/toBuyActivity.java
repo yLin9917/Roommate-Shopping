@@ -1,12 +1,13 @@
 package edu.uga.cs.roommateshopping;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -25,21 +26,35 @@ public class toBuyActivity extends AppCompatActivity {
     private static final String TAG = "toBuyActivity";
 
     TextView itemSelected;
-    Button purcahsedButton;
+    Button addToCartButton;
     private static List<ToBuyItem> toBuyList;
-    private RecyclerView recyclerView;
-    private ToBuyListRecycleAdapter recycleAdapter;
+    private RecyclerView toBuyListrecyclerView;
+    private ToBuyListRecycleAdapter toBuyListRecycleAdapter;
+
+    private static List<ToBuyItem> cartList;
+    private RecyclerView cartListrecyclerView;
+    private CartListRecyclerAdapter cartListRecyclerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_buy);
 
-        purcahsedButton = findViewById(R.id.purchaseButton);
-        itemSelected = findViewById(R.id.itemSelected);
-        purcahsedButtonHandler();
+        // set up the adapter and recyclerview for the cartList
+        cartList = new ArrayList<>();
+        cartListrecyclerView = findViewById(R.id.cartList);
+        cartListrecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cartListRecyclerAdapter = new CartListRecyclerAdapter(this, cartList);
+        ItemTouchHelper cartTouchHelper = new ItemTouchHelper(cartListTouchCallback);
+        cartTouchHelper.attachToRecyclerView(cartListrecyclerView);
+        cartListrecyclerView.setAdapter(cartListRecyclerAdapter);
 
+        addToCartButton = findViewById(R.id.addToCartButton);
         addButtonHandler();
+        itemSelected = findViewById(R.id.itemSelected);
+        addToCartButtonHandler();
+
 
         ToBuyItem one = new ToBuyItem("item 1", 1);
         ToBuyItem two = new ToBuyItem("item 2", 2);
@@ -48,30 +63,52 @@ public class toBuyActivity extends AppCompatActivity {
         toBuyList.add(one);
         toBuyList.add(two);
         toBuyList.add(three);
+        ToBuyItem four = new ToBuyItem("item 4", 1);
+        ToBuyItem five = new ToBuyItem("item 5", 2);
+        ToBuyItem six = new ToBuyItem("item 6", 3);
+        toBuyList.add(four);
+        toBuyList.add(five);
+        toBuyList.add(six);
 
-        recyclerView = findViewById(R.id.toBuyList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        recycleAdapter = new ToBuyListRecycleAdapter(this, toBuyList);
-        recycleAdapter.setOnSelectedItemsChangedListener(new ToBuyListRecycleAdapter.OnSelectedItemsChangedListener() {
+        // set up the adapter and recyclerview for the toBuyList
+        toBuyListrecyclerView = findViewById(R.id.toBuyList);
+        toBuyListrecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        toBuyListRecycleAdapter = new ToBuyListRecycleAdapter(this, toBuyList);
+        toBuyListRecycleAdapter.setOnSelectedItemsChangedListener(new ToBuyListRecycleAdapter.OnSelectedItemsChangedListener() {
             @Override
             public void onSelectedItemsChanged(int count) {
-                if (recycleAdapter.getSelectedItems().toString().equals(""))
-                    itemSelected.setText("Selected item: 0");
-                else
-                    itemSelected.setText("Selected item: " + count);
+                itemSelectedUpdate();
             }
         });
 
-        recyclerView.setAdapter(recycleAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(toBuyItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(toBuyListrecyclerView);
+        toBuyListrecyclerView.setAdapter(toBuyListRecycleAdapter);
 
     }
 
     /**
      * set up the handler for purcahsedButton
      */
-    private void purcahsedButtonHandler() {
+    private void addToCartButtonHandler() {
+        addToCartButton.setOnClickListener( e -> {
+            ToBuyListRecycleAdapter adapter = (ToBuyListRecycleAdapter) toBuyListrecyclerView.getAdapter();
+            List<ToBuyItem> selectedItems = adapter.getSelectedItems();
+            if (selectedItems.size() == 0) {
 
+            } else {
+                for (ToBuyItem item : selectedItems) {
+                    int position = toBuyList.indexOf(item);
+                    cartList.add(item);
+                    toBuyList.remove(position);
+                    toBuyListRecycleAdapter.notifyItemRemoved(position);
+                }
+                Toast.makeText(toBuyActivity.this, "Items added to the cart", Toast.LENGTH_SHORT).show();
+                itemSelectedUpdate();
+                toBuyListRecycleAdapter.notifyDataSetChanged();
+                cartListRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     /**
@@ -102,11 +139,13 @@ public class toBuyActivity extends AppCompatActivity {
             submitButton.setOnClickListener(eee -> {
                 String name = n.getText().toString();
                 String number = num.getText().toString();
-                Log.d("999999", name);
                 String toastMess = "Please fill in the blank!";
                 if (name.length() != 0 && number.length() != 0 ) {
                     ToBuyItem item = new ToBuyItem(name, Integer.parseInt(number));
                     toBuyList.add(item);
+                    toBuyListRecycleAdapter.notifyDataSetChanged();
+                    Toast.makeText(toBuyActivity.this, "Item added to the list", Toast.LENGTH_SHORT).show();
+
                 } else {
                     Toast.makeText(this, toastMess, Toast.LENGTH_SHORT).show();
                 }
@@ -118,6 +157,62 @@ public class toBuyActivity extends AppCompatActivity {
 
 
 
+    }
+
+    /**
+     * A method to handle tobuylist swipe, after the swipe, the item will be deleted.
+     */
+    ItemTouchHelper.SimpleCallback toBuyItemTouchCallback  = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            Toast.makeText(toBuyActivity.this, "Item deleted from the list", Toast.LENGTH_SHORT).show();
+            int position = viewHolder.getAdapterPosition();
+            toBuyList.remove(position);
+            toBuyListRecycleAdapter.notifyItemRemoved(position);
+            itemSelectedUpdate();
+
+        }
+    };
+
+    /**
+     * A method to handle cartlist swipe, after the swipe, the item will be deleted.
+     */
+    ItemTouchHelper.SimpleCallback cartListTouchCallback  = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            Toast.makeText(toBuyActivity.this, "Item added to the list", Toast.LENGTH_SHORT).show();
+            int position = viewHolder.getAdapterPosition();
+            ToBuyItem selectedItem = cartList.get(position);
+            toBuyList.add(selectedItem);
+            selectedItem.setSelected(false);
+            toBuyListRecycleAdapter.notifyDataSetChanged();
+
+            cartList.remove(position);
+            cartListRecyclerAdapter.notifyItemRemoved(position);
+
+        }
+    };
+
+
+    private void itemSelectedUpdate() {
+        int count = toBuyListRecycleAdapter.getSelectedItems().size();
+        if (count == 0) {
+            itemSelected.setText("Item selected: 0");
+        } else {
+            itemSelected.setText("Item selected: " + count);
+        }
     }
 
 
