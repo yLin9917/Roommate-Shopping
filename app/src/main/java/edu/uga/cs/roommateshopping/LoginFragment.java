@@ -59,7 +59,7 @@ public class LoginFragment extends Fragment {
      */
     private void loginButton() {
         login.setOnClickListener(e -> {
-            changeFragment(new loggedFragment());
+            changeFragment(new LoggedFragment());
         });
     }
 

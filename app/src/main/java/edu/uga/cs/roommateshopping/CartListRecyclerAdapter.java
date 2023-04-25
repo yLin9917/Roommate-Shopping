@@ -1,6 +1,7 @@
 package edu.uga.cs.roommateshopping;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecyclerAdapter.cartListHolder>{
@@ -68,4 +70,17 @@ public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecycl
     public int getItemCount() {
         return list.size();
     }
+
+
+    /**
+     * Return the number of selected items
+     * @return the number of selected items
+     */
+    public List<ToBuyItem> getSelectedItems() {
+        return new ArrayList<>(list);
+    }
+
 }
+
+
+

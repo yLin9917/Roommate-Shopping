@@ -21,20 +21,29 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <TextView
+            <EditText
                 android:id="@+id/itemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:paddingLeft="15dp"
                 android:text="TextView"
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:background="@null"
+                android:maxLength="20"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <EditText
                 android:id="@+id/itemQuantity"
+                android:background="@null"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="5"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
+                android:inputType="number"
                 android:text="TextView"
                 android:textSize="18sp"
                 android:textStyle="bold" />

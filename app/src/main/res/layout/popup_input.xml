@@ -16,9 +16,12 @@
         android:text="The items you want to buy:" />
 
     <EditText
-        android:id="@+id/input_text"
+        android:id="@+id/itemName"
         android:layout_width="match_parent"
+        android:imeOptions="actionDone"
+        android:maxLength="20"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:fontFamily="@font/allerta_stencil"
         android:hint="Item name" />
 
@@ -27,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/allerta_stencil"
-        android:paddingTop="30dp"
+        android:paddingTop="20dp"
         android:text="Quantity:" />
 
     <EditText
@@ -36,9 +39,12 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:fontFamily="@font/allerta_stencil"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:maxLength="5"
         android:hint="item number"
         android:digits="0123456789"
-        android:inputType="textPassword" />
+        android:inputType="phone" />
 
     <LinearLayout
         android:layout_width="match_parent"

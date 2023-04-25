@@ -15,18 +15,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class loggedFragment extends Fragment {
+public class LoggedFragment extends Fragment {
 
     EditText user;
     Button viewList, recentlyPurchased, logout;
 
-    public loggedFragment() {
+    public LoggedFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static loggedFragment newInstance(String param1, String param2) {
-        loggedFragment fragment = new loggedFragment();
+    public static LoggedFragment newInstance(String param1, String param2) {
+        LoggedFragment fragment = new LoggedFragment();
 
         return fragment;
     }
@@ -74,7 +74,8 @@ public class loggedFragment extends Fragment {
      */
     private void recentlyPurchasedButton() {
         recentlyPurchased.setOnClickListener(e -> {
-
+            Intent intent = new Intent(this.getActivity(), SettleActivity.class);
+            startActivity(intent);
         });
     }
 

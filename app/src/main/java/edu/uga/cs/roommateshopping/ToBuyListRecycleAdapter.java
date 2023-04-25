@@ -1,14 +1,20 @@
 package edu.uga.cs.roommateshopping;
 
 import android.content.Context;
+import android.text.InputFilter;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -22,7 +28,7 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
 
     private final Context context;
 
-    private List<ToBuyItem> list;
+    private static List<ToBuyItem> list;
 
     /**
      * initialize the context and list
@@ -40,7 +46,8 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
      */
     public static class toBuyListHolder extends RecyclerView.ViewHolder {
 
-        TextView itemName, itemQuantity;
+        CardView card_view;
+        EditText itemName, itemQuantity;
         CheckBox checkBox;
 
         /**
@@ -52,6 +59,42 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
             checkBox = itemView.findViewById(R.id.checkBox);
             itemName = itemView.findViewById(R.id.itemName);
             itemQuantity = itemView.findViewById(R.id.itemQuantity);
+            card_view = itemView.findViewById(R.id.card_view);
+
+            itemName.setSingleLine(true);
+            itemQuantity.setSingleLine(true);
+
+//            itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+//                    if (i == EditorInfo.IME_ACTION_DONE) {
+//                        // Update the ToBuyItem object with the new name
+//                        ToBuyItem item = list.get(getAdapterPosition());
+//                        item.setName(textView.getText().toString());
+//                        // Update the CardView UI with the new name
+//                        itemName.setText(item.getName());
+//                        return true;
+//                    }
+//                    return false;
+//                }
+//            });
+//
+//            itemQuantity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+//                    if (i == EditorInfo.IME_ACTION_DONE) {
+//                        // Update the ToBuyItem object with the new quantity
+//                        ToBuyItem item = list.get(getAdapterPosition());
+//                        item.setQuantity(Integer.parseInt(textView.getText().toString()));
+//                        // Update the CardView UI with the new quantity
+//                        itemQuantity.setText(item.getQuantity());
+//                        return true;
+//                    }
+//                    return false;
+//                }
+//            });
+
+
         }
     }
 
