@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,6 @@ public class RegisterFragment extends Fragment {
      * Required empty public constructor
      */
     public RegisterFragment() {
-
     }
 
     // TODO: Rename and change types and number of parameters

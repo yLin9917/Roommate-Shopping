@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class LoggedFragment extends Fragment {
@@ -23,8 +22,10 @@ public class LoggedFragment extends Fragment {
     TextView welcomeText;
     Button viewList, recentlyPurchased, logout;
 
+    /**
+     * Required empty public constructor
+     */
     public LoggedFragment() {
-        // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
@@ -57,7 +58,6 @@ public class LoggedFragment extends Fragment {
 
         welcomeText = view.findViewById(R.id.welcomeText);
         if (username != "") welcomeText.setText("Hello " + username + ", ");
-        Log.d("999999", username);
 
         viewList = view.findViewById(R.id.viewList);
         viewListButton();
