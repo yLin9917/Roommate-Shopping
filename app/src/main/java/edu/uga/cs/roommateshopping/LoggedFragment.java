@@ -9,15 +9,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class LoggedFragment extends Fragment {
 
-    EditText user;
+    String username;
+    TextView welcomeText;
     Button viewList, recentlyPurchased, logout;
 
     public LoggedFragment() {
@@ -34,6 +37,11 @@ public class LoggedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        username = "";
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            username = bundle.getString("username");
+        }
     }
 
     @Override
@@ -46,6 +54,10 @@ public class LoggedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        welcomeText = view.findViewById(R.id.welcomeText);
+        if (username != "") welcomeText.setText("Hello " + username + ", ");
+        Log.d("999999", username);
 
         viewList = view.findViewById(R.id.viewList);
         viewListButton();

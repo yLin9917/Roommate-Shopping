@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -109,13 +110,13 @@ public class RegisterFragment extends Fragment {
      * handler the register process
      */
     private void registerHandler() {
-        String email = registerEmail.getText().toString();
-        String name = registerUserName.getText().toString();
-        String pass = regPassword.getText().toString();
-        String cpass = regComPassword.getText().toString();
+        String email = registerEmail.getText().toString().trim();
+        String name = registerUserName.getText().toString().trim();
+        String pass = regPassword.getText().toString().trim();
+        String cpass = regComPassword.getText().toString().trim();
         if(pass.equals(cpass) && pass.length() >= 6){
             //register
-            mAuth.createUserWithEmailAndPassword( email, pass )
+            mAuth.createUserWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -124,10 +125,10 @@ public class RegisterFragment extends Fragment {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 database = FirebaseDatabase.getInstance();
                                 usersRef = database.getReference("users");
-                                String userId = mAuth.getCurrentUser().getUid();
-                                usersRef.child(userId).child("username").setValue(name);
-                                usersRef.child(userId).child("password").setValue(pass);
-                                usersRef.child(userId).child("email").setValue(email);
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(name)
+                                        .build();
+                                user.updateProfile(profileUpdates);
                                 changeFragment(new SplashFragment());
                                 Toast.makeText(getContext(),"Account Successfully Created",Toast.LENGTH_SHORT).show();
                             }
