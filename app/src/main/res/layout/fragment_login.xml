@@ -25,19 +25,19 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="51dp"
         android:layout_marginTop="110dp"
-        android:text="User name: "
+        android:text="Email: "
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/loginUserName"
+        android:id="@+id/loginEmail"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:textColor="#FFFFFF"
         android:layout_gravity="center_horizontal"
         android:ems="10"
-        android:hint="User name"
-        android:inputType="textPersonName" />
+        android:hint="Email Address"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/textView3"
