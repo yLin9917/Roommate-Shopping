@@ -11,7 +11,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#EBF0F9"
+        android:background="#FFDE03"
         android:gravity="right"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:fontFamily="cursive"
             android:text="Shopping list"
-            android:textColor="#703FB5"
+            android:textColor="@color/black"
             android:textSize="48sp" />
 
         <LinearLayout
@@ -43,13 +43,13 @@
                 android:text="Item selected: 0" />
 
             <Button
-                android:id="@+id/purchaseButton"
+                android:id="@+id/addToCartButton"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:backgroundTint="#EBF0F9"
                 android:drawableLeft="@drawable/shopping_icon"
-                android:text="Mark As Purchased"
+                android:text="Add to Cart"
                 android:textColor="#3F51B5"
                 android:visibility="visible" />
 
@@ -63,13 +63,72 @@
 
         </LinearLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/toBuyList"
+            android:layout_width="match_parent"
+            android:layout_height="244dp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            tools:layout_editor_absoluteX="101dp" />
+
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/toBuyList"
-        android:layout_width="match_parent"
+
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#00BFA5"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/toBuyHome"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="cursive"
+                android:gravity="center"
+                android:text="Shopping Cart"
+                android:textColor="#EBF0F9"
+                android:textSize="48sp" />
+
+            <Button
+                android:id="@+id/checkout"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Check Out"
+                android:textColor="#EBF0F9" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/toBuyHome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="home"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        tools:layout_editor_absoluteX="101dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:backgroundTint="@null"
+        android:background="@drawable/buttongradient"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

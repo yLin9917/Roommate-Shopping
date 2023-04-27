@@ -9,8 +9,8 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="#FFF59D"
+        android:layout_height="55dp"
+        card_view:cardBackgroundColor="#CCF381"
         card_view:cardCornerRadius="7dp"
         card_view:cardElevation="1dp"
         card_view:cardMaxElevation="1dp"
@@ -19,39 +19,27 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/itemName"
+            <TextView
+                android:id="@+id/cartItemName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
-                android:background="@null"
-                android:imeOptions="actionDone"
-                android:maxLength="20"
                 android:paddingLeft="15dp"
-                android:singleLine="true"
                 android:text="TextView"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/itemQuantity"
+            <TextView
+                android:id="@+id/cartItemQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:imeOptions="actionDone"
-                android:inputType="number"
-                android:maxLength="5"
-                android:singleLine="true"
+                android:paddingRight="15dp"
                 android:text="TextView"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
