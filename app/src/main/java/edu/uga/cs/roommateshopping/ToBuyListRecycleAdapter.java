@@ -40,6 +40,14 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
         this.list = list;
     }
 
+    /**
+     * reset the list and call notifyDataSetChanged
+     * @param list the new list
+     */
+    public void setData(List<ToBuyItem> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
 
     /**
      * Holder class
@@ -147,6 +155,7 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
         else
             return 0;
     }
+
 
     /**
      * Sets an {@link OnSelectedItemsChangedListener} to be notified when the selected items change.

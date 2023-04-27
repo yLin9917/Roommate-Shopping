@@ -49,46 +49,48 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        mAuth = FirebaseAuth.getInstance();
-        String email = "dawg@mail.com";
-        String password = "password";
 
-        mAuth.signInWithEmailAndPassword( email, password )
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success
-                            Log.d( TAG, "signInWithEmail:success" );
-                            FirebaseUser user = mAuth.getCurrentUser();
-                        }
-                        else {
-                            // If sign in fails
-                            Log.d( TAG, "signInWithEmail:failure", task.getException() );
-                        }
-                    }
-                });
+//
+//        mAuth = FirebaseAuth.getInstance();
+//        String email = "dawg@mail.com";
+//        String password = "password";
+//
+//        mAuth.signInWithEmailAndPassword( email, password )
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success
+//                            Log.d( TAG, "signInWithEmail:success" );
+//                            FirebaseUser user = mAuth.getCurrentUser();
+//                        }
+//                        else {
+//                            // If sign in fails
+//                            Log.d( TAG, "signInWithEmail:failure", task.getException() );
+//                        }
+//                    }
+//                });
 
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference( "message" );
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference( "message" );
 
         // Read from the database value for ”message”
-        myRef.addValueEventListener( new ValueEventListener() {
-            @Override
-            public void onDataChange( DataSnapshot dataSnapshot ) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String message = dataSnapshot.getValue( String.class );
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w( TAG, "Failed to read value.", error.toException() );
-            }
-        });
+//        myRef.addValueEventListener( new ValueEventListener() {
+//            @Override
+//            public void onDataChange( DataSnapshot dataSnapshot ) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                String message = dataSnapshot.getValue( String.class );
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                Log.w( TAG, "Failed to read value.", error.toException() );
+//            }
+//        });
 
     }
 

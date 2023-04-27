@@ -20,9 +20,16 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class toBuyActivity extends AppCompatActivity {
 
@@ -38,21 +45,19 @@ public class toBuyActivity extends AppCompatActivity {
     private CartListRecyclerAdapter cartListRecyclerAdapter;
 
 
+    // create collection for the program
+    FirebaseDatabase db = FirebaseDatabase.getInstance();
+    DatabaseReference toBuyRef = db.getReference("toBuyList");
+    DatabaseReference cartRef = db.getReference("cartList");
+    DatabaseReference purchasedRef = db.getReference("purchasedList");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_buy);
 
-        if (savedInstanceState != null) {
-            cartList = (List<ToBuyItem>) savedInstanceState.getSerializable("cartList");
-            toBuyList = (List<ToBuyItem>) savedInstanceState.getSerializable("toBuyList");
-            purchasedList = (List<ToBuyItem>) savedInstanceState.getSerializable("purchasedList");
-        } else {
-            cartList = new ArrayList<>();
-            toBuyList = new ArrayList<>();
-            purchasedList =  new ArrayList<>();
-            initList();
-        }
+//        purchasedRef.setValue(purchasedList);
+//        cartRef.setValue(cartList);
 
         // set up the adapter and recyclerview for the cartList
         cartListRecyclerView = findViewById(R.id.cartList);
@@ -62,6 +67,7 @@ public class toBuyActivity extends AppCompatActivity {
         cartTouchHelper.attachToRecyclerView(cartListRecyclerView);
         cartListRecyclerView.setAdapter(cartListRecyclerAdapter);
 
+        // set up all the buttons and implement their handlers
         addToCartButton = findViewById(R.id.addToCartButton);
         addButtonHandler();
         itemSelected = findViewById(R.id.itemSelected);
@@ -82,15 +88,28 @@ public class toBuyActivity extends AppCompatActivity {
                 itemSelectedUpdate();
             }
         });
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(toBuyItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(toBuyListRecyclerView);
         toBuyListRecyclerView.setAdapter(toBuyListRecycleAdapter);
 
+        // add the eventListener for the toBuyRef
+        toBuyRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                toBuyList = firebaseToBuyList(dataSnapshot);
+                toBuyListRecycleAdapter.setData(toBuyList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+
     }
 
     /**
-     * set up the handler for purcahsedButton
+     * set up the handler for purchasedButton
      */
     private void addToCartButtonHandler() {
         addToCartButton.setOnClickListener( e -> {
@@ -143,9 +162,10 @@ public class toBuyActivity extends AppCompatActivity {
                 String number = num.getText().toString();
                 String toastMess = "Please fill in the blank!";
                 if (name.length() != 0 && number.length() != 0 ) {
-                    ToBuyItem item = new ToBuyItem(name, Integer.parseInt(number));
-                    toBuyList.add(item);
-                    toBuyListRecycleAdapter.notifyDataSetChanged();
+                    ToBuyItem item = new ToBuyItem(name, Integer.parseInt(number), false);
+//                    toBuyList.add(item);
+//                    toBuyListRecycleAdapter.notifyDataSetChanged();
+                    toBuyRef.push().setValue(item);
                     Toast.makeText(toBuyActivity.this, "Item added to the list", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, toastMess, Toast.LENGTH_SHORT).show();
@@ -210,6 +230,9 @@ public class toBuyActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * set up the handler for the toBuyHomeButton
+     */
     private void toBuyHomeButtonHandler() {
         toBuyHome.setOnClickListener(e -> {
             Intent intent = new Intent(this, MainActivity.class);
@@ -277,21 +300,6 @@ public class toBuyActivity extends AppCompatActivity {
         }
     }
 
-    private void initList() {
-        ToBuyItem one = new ToBuyItem("item 1", 1);
-        ToBuyItem two = new ToBuyItem("item 2", 2);
-        ToBuyItem three = new ToBuyItem("item 3", 3);
-        toBuyList.add(one);
-        toBuyList.add(two);
-        toBuyList.add(three);
-        ToBuyItem four = new ToBuyItem("item 4", 1);
-        ToBuyItem five = new ToBuyItem("item 5", 2);
-        ToBuyItem six = new ToBuyItem("item 6", 3);
-        toBuyList.add(four);
-        toBuyList.add(five);
-        toBuyList.add(six);
-    }
-
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -305,6 +313,20 @@ public class toBuyActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         cartList = (List<ToBuyItem>) savedInstanceState.getSerializable("cartList");
         toBuyList = (List<ToBuyItem>) savedInstanceState.getSerializable("toBuyList");
+    }
+
+    private List<ToBuyItem> firebaseToBuyList(DataSnapshot dataSnapshot) {
+        List<ToBuyItem> list = new ArrayList<>();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            Map<String, Object> snapshotValue = (Map<String, Object>) snapshot.getValue();
+            ToBuyItem toBuyItem = new ToBuyItem(
+                    snapshotValue.get("name").toString(),
+                    Integer.parseInt(snapshotValue.get("quantity").toString()),
+                    (Boolean) snapshotValue.get("selected")
+            );
+            list.add(toBuyItem);
+        }
+        return list;
     }
 
 }
