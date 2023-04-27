@@ -162,10 +162,14 @@ public class toBuyActivity extends AppCompatActivity {
                 String number = num.getText().toString();
                 String toastMess = "Please fill in the blank!";
                 if (name.length() != 0 && number.length() != 0 ) {
+                    // set the unique id for each added item
+                    String uniqueId = toBuyRef.push().getKey();
                     ToBuyItem item = new ToBuyItem(name, Integer.parseInt(number), false);
-//                    toBuyList.add(item);
-//                    toBuyListRecycleAdapter.notifyDataSetChanged();
-                    toBuyRef.push().setValue(item);
+                    item.setId(uniqueId);
+                    // push the item to the database
+                    toBuyRef.child(uniqueId).setValue(item);
+                    toBuyList.add(item);
+                    toBuyListRecycleAdapter.setData(toBuyList);
                     Toast.makeText(toBuyActivity.this, "Item added to the list", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, toastMess, Toast.LENGTH_SHORT).show();
@@ -242,7 +246,7 @@ public class toBuyActivity extends AppCompatActivity {
     }
 
     /**
-     * A method to handle tobuylist swipe, after the swipe, the item will be deleted.
+     * A method to handle TOBUYLIST swipe, after the swipe, the item will be deleted.
      */
     ItemTouchHelper.SimpleCallback toBuyItemTouchCallback  = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
 
@@ -253,10 +257,21 @@ public class toBuyActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            Toast.makeText(toBuyActivity.this, "Item deleted from the list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(toBuyActivity.this, "Item deleted from the ToBuy list", Toast.LENGTH_SHORT).show();
+
+            // delete the item from recyclerview
             int position = viewHolder.getAdapterPosition();
-            toBuyList.remove(position);
-            toBuyListRecycleAdapter.notifyItemRemoved(position);
+            ToBuyItem selectedItem = toBuyList.get(position);
+            toBuyList.remove(selectedItem);
+            toBuyListRecycleAdapter.setData(toBuyList);
+
+            // delete the item from firebase
+            String id = selectedItem.getId();
+            DatabaseReference ref = FirebaseDatabase
+                    .getInstance()
+                    .getReference("toBuyList")
+                    .child(id);
+            ref.removeValue();
             itemSelectedUpdate();
 
         }
@@ -275,7 +290,7 @@ public class toBuyActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            Toast.makeText(toBuyActivity.this, "Item added to the list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(toBuyActivity.this, "Item added to the ToBuy list", Toast.LENGTH_SHORT).show();
             int position = viewHolder.getAdapterPosition();
             ToBuyItem selectedItem = cartList.get(position);
             toBuyList.add(selectedItem);
@@ -324,6 +339,7 @@ public class toBuyActivity extends AppCompatActivity {
                     Integer.parseInt(snapshotValue.get("quantity").toString()),
                     (Boolean) snapshotValue.get("selected")
             );
+            toBuyItem.setId(snapshotValue.get("id").toString());
             list.add(toBuyItem);
         }
         return list;

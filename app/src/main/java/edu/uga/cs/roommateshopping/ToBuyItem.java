@@ -6,6 +6,8 @@ import java.io.Serializable;
  * This class is use to define the to buy list
  */
 public class ToBuyItem implements Serializable {
+
+    private String id;
     private String name;
     private int quantity;
     private boolean isSelected;
@@ -29,16 +31,13 @@ public class ToBuyItem implements Serializable {
         this.isSelected = false;
     }
 
-//    /**
-//     * use to initialize the item
-//     * @param name item name
-//     * @param quantity item quantity
-//     */
-//    public ToBuyItem(String name, int quantity) {
-//        this.name = name;
-//        this.quantity = quantity;
-//        isSelected = false;
-//    }
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public ToBuyItem(String name, int quantity, Boolean selected) {
         this.name = name;
@@ -92,6 +91,7 @@ public class ToBuyItem implements Serializable {
         return "ToBuyItem{" +
                 "name='" + name + '\'' +
                 ", quantity=" + quantity +
+                ", id=" + id +
                 '}';
     }
 }
