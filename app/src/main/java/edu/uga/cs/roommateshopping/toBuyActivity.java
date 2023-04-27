@@ -135,11 +135,20 @@ public class toBuyActivity extends AppCompatActivity {
             }
             for (ToBuyItem item : selectedItems) {
                 int position = toBuyList.indexOf(item);
+                String id = item.getId();
                 String uniqueId = cartRef.push().getKey();
                 item.setId(uniqueId);
                 cartRef.child(uniqueId).setValue(item);
                 cartList.add(item);
                 cartListRecyclerAdapter.setData(cartList);
+
+                // delete the item from firebase ToBuyList
+                DatabaseReference ref = FirebaseDatabase
+                        .getInstance()
+                        .getReference("toBuyList")
+                        .child(id);
+                ref.removeValue();
+                itemSelectedUpdate();
 
                 toBuyList.remove(position);
                 toBuyListRecycleAdapter.notifyItemRemoved(position);
