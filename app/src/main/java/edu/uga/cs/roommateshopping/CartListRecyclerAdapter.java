@@ -21,7 +21,7 @@ public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecycl
 
     private final Context context;
 
-    private List<ToBuyItem> list;
+    private static List<ToBuyItem> list;
 
     /**
      * initialize the context and list
@@ -31,6 +31,15 @@ public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecycl
     public CartListRecyclerAdapter(Context context, List<ToBuyItem> list ) {
         this.context = context;
         this.list = list;
+    }
+
+    /**
+     * reset the list and call notifyDataSetChanged
+     * @param list the new list
+     */
+    public void setData(List<ToBuyItem> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     /**

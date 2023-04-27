@@ -106,6 +106,20 @@ public class toBuyActivity extends AppCompatActivity {
             }
         });
 
+        // add the eventListener for the cartRef
+        cartRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                cartList = firebaseToBuyList(dataSnapshot);
+                CartListRecyclerAdapter.setData(cartList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+
     }
 
     /**
@@ -121,9 +135,15 @@ public class toBuyActivity extends AppCompatActivity {
             }
             for (ToBuyItem item : selectedItems) {
                 int position = toBuyList.indexOf(item);
+                String uniqueId = cartRef.push().getKey();
+                item.setId(uniqueId);
+                cartRef.child(uniqueId).setValue(item);
                 cartList.add(item);
+                CartListRecyclerAdapter.setData(cartList);
+
                 toBuyList.remove(position);
                 toBuyListRecycleAdapter.notifyItemRemoved(position);
+                toBuyListRecycleAdapter.setData(toBuyList);
             }
             Toast.makeText(toBuyActivity.this, "Items added to the cart", Toast.LENGTH_SHORT).show();
             itemSelectedUpdate();
