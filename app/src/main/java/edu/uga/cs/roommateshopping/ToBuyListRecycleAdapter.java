@@ -17,6 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,38 +74,6 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
 
             itemName.setSingleLine(true);
             itemQuantity.setSingleLine(true);
-
-//            itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-//                    if (i == EditorInfo.IME_ACTION_DONE) {
-//                        // Update the ToBuyItem object with the new name
-//                        ToBuyItem item = list.get(getAdapterPosition());
-//                        item.setName(textView.getText().toString());
-//                        // Update the CardView UI with the new name
-//                        itemName.setText(item.getName());
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//            });
-//
-//            itemQuantity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-//                    if (i == EditorInfo.IME_ACTION_DONE) {
-//                        // Update the ToBuyItem object with the new quantity
-//                        ToBuyItem item = list.get(getAdapterPosition());
-//                        item.setQuantity(Integer.parseInt(textView.getText().toString()));
-//                        // Update the CardView UI with the new quantity
-//                        itemQuantity.setText(item.getQuantity());
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//            });
-
-
         }
     }
 
@@ -126,6 +97,14 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 item.setSelected(isChecked);
+                // update the selected for the item to the firebase
+                String id = item.getId();
+                DatabaseReference ref = FirebaseDatabase
+                        .getInstance()
+                        .getReference("toBuyList")
+                        .child(id);
+                ref.child("selected").setValue(isChecked);
+
                 if (onSelectedItemsChangedListener != null) {
                     onSelectedItemsChangedListener.onSelectedItemsChanged(getSelectedItems().size());
                 }
