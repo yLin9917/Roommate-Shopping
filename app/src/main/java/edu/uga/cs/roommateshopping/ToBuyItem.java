@@ -92,6 +92,7 @@ public class ToBuyItem implements Serializable {
                 "name='" + name + '\'' +
                 ", quantity=" + quantity +
                 ", id=" + id +
+                ", selected=" + isSelected +
                 '}';
     }
 }
