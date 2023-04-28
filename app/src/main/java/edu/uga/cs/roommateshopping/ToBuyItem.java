@@ -45,6 +45,13 @@ public class ToBuyItem implements Serializable {
         this.isSelected = selected;
     }
 
+    public ToBuyItem(String name, int quantity, Boolean selected, String id) {
+        this.name = name;
+        this.quantity = quantity;
+        this.isSelected = selected;
+        this.id = id;
+    }
+
     /**
      * get quantity
      *
@@ -52,6 +59,15 @@ public class ToBuyItem implements Serializable {
      */
     public String getQuantity() {
         return String.valueOf(quantity);
+    }
+
+    /**
+     * get int quantity
+     *
+     * @return int quantity
+     */
+    public int getIntQuantity() {
+        return quantity;
     }
 
     /**
