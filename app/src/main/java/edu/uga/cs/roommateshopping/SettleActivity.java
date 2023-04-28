@@ -39,6 +39,10 @@ public class SettleActivity extends AppCompatActivity {
 
     TextView recentlyTotal;
 
+    double total = 0;
+    double roommate1 = 0;
+    double roommate2 = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,11 +85,16 @@ public class SettleActivity extends AppCompatActivity {
         View popupView = getLayoutInflater().inflate(R.layout.settlepopup, null);
         TextView settleTotalCost = popupView.findViewById(R.id.settleTotalCost);
         TextView settleAverage = popupView.findViewById(R.id.settleAverage);
+        TextView settleRoomate1 = popupView.findViewById(R.id.settleRoomate1);
+        TextView settleRoomate2 = popupView.findViewById(R.id.settleRoomate2);
         Button finalSettleButton = popupView.findViewById(R.id.finalSettleButton);
 
         settleButton.setOnClickListener(e -> {
-            settleTotalCost.setText("Total: $100");
-            settleAverage.setText("Average Cost: $50");
+            settleRoomate1.setText("Lin: $" + String.format("%.2f", roommate1));
+            settleRoomate2.setText("Anna: $" + String.format("%.2f", roommate2));
+            settleTotalCost.setText(recentlyTotal.getText().toString());
+            settleAverage.setText("Average Cost: $" + String.format("%.2f", total / 2));
+
 
             // create the popup window
             int width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -96,9 +105,8 @@ public class SettleActivity extends AppCompatActivity {
             popupWindow.showAtLocation(settleButton, Gravity.CENTER, 0, 0);
 
             finalSettleButton.setOnClickListener(ee -> {
-//                String total = settleTotalCost.getText().toString();
-//                String average = settleAverage.getText().toString();
-
+                purchasedRef.removeValue();
+                popupWindow.dismiss();
 
             });
 
@@ -139,11 +147,18 @@ public class SettleActivity extends AppCompatActivity {
      * update the total price
      */
     private void updateTotal() {
-        int total = 0;
+        total = 0;
+        roommate1 = 0;
+        roommate2 = 0;
         for (int i = 0; i < purchasedItem.size(); i++) {
-            total+=purchasedItem.get(i).getCost();
+            total += purchasedItem.get(i).getCost();
+            if (purchasedItem.get(i).getName().equals("Lin")) {
+                roommate1 += purchasedItem.get(i).getCost();
+            } else if (purchasedItem.get(i).getName().equals("az")) {
+                roommate2 += purchasedItem.get(i).getCost();
+            }
         }
-        recentlyTotal.setText("Total: $" + total);
+        recentlyTotal.setText("Total: $" + String.format("%.2f", total));
     }
 
 }
