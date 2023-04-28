@@ -97,13 +97,13 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 item.setSelected(isChecked);
-                // update the selected for the item to the firebase
-                String id = item.getId();
-                DatabaseReference ref = FirebaseDatabase
-                        .getInstance()
-                        .getReference("toBuyList")
-                        .child(id);
-                ref.child("selected").setValue(isChecked);
+//                // update the selected for the item to the firebase
+//                String id = item.getId();
+//                DatabaseReference ref = FirebaseDatabase
+//                        .getInstance()
+//                        .getReference("toBuyList")
+//                        .child(id);
+//                ref.child("selected").setValue(isChecked);
 
                 if (onSelectedItemsChangedListener != null) {
                     onSelectedItemsChangedListener.onSelectedItemsChanged(getSelectedItems().size());

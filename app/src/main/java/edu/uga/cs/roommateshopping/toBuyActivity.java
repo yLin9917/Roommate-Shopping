@@ -110,7 +110,7 @@ public class toBuyActivity extends AppCompatActivity {
         cartRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                cartList = firebaseToBuyList(dataSnapshot);
+                cartList = firebaseCartList(dataSnapshot);
                 cartListRecyclerAdapter.setData(cartList);
             }
 
@@ -123,7 +123,7 @@ public class toBuyActivity extends AppCompatActivity {
     }
 
     /**
-     * set up the handler for purchasedButton
+     * set up the handler for addToCartButton
      */
     private void addToCartButtonHandler() {
         addToCartButton.setOnClickListener( e -> {
@@ -137,12 +137,14 @@ public class toBuyActivity extends AppCompatActivity {
                 int position = toBuyList.indexOf(item);
                 String id = item.getId();
                 String uniqueId = cartRef.push().getKey();
-                item.setId(uniqueId);
-                cartRef.child(uniqueId).setValue(item);
-                cartList.add(item);
+                ToBuyItem tempItem = new ToBuyItem(item.getName(), item.getIntQuantity(),item.isSelected(), uniqueId);
+
+                cartRef.child(uniqueId).setValue(tempItem);
+                cartList.add(tempItem);
                 cartListRecyclerAdapter.setData(cartList);
 
                 // delete the item from firebase ToBuyList
+                // String org
                 DatabaseReference ref = FirebaseDatabase
                         .getInstance()
                         .getReference("toBuyList")
@@ -150,7 +152,7 @@ public class toBuyActivity extends AppCompatActivity {
                 ref.removeValue();
                 itemSelectedUpdate();
 
-                toBuyList.remove(position);
+                toBuyList.remove(item);
                 toBuyListRecycleAdapter.notifyItemRemoved(position);
                 toBuyListRecycleAdapter.setData(toBuyList);
             }
@@ -320,29 +322,30 @@ public class toBuyActivity extends AppCompatActivity {
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
             Toast.makeText(toBuyActivity.this, "Item added to the ToBuy list", Toast.LENGTH_SHORT).show();
+
+            // delete the item from recyclerview and add it to toBuyList
             int position = viewHolder.getAdapterPosition();
             ToBuyItem selectedItem = cartList.get(position);
-            ToBuyItem tempItem = cartList.get(position);
-            toBuyList.add(selectedItem);
-            selectedItem.setSelected(false);
+            String uniqueId = toBuyRef.push().getKey();
+            ToBuyItem tempItem = new ToBuyItem(selectedItem.getName(), selectedItem.getIntQuantity(),false, uniqueId);
+//            String uniqueId = toBuyRef.push().getKey();
+//            tempItem.setId(uniqueId);
+            toBuyRef.child(uniqueId).setValue(tempItem);
+            toBuyList.add(tempItem);
             toBuyListRecycleAdapter.notifyDataSetChanged();
 
-            // add item to firebase toBuyList
-            String uniqueId = toBuyRef.push().getKey();
-            selectedItem.setId(uniqueId);
-            toBuyRef.child(uniqueId).setValue(selectedItem);
-            //double check if have problem, if there is, move line 316 to 325
+            cartList.remove(selectedItem);
+            cartListRecyclerAdapter.notifyItemRemoved(position);
 
             // delete the item from firebase cartList
-            String id = tempItem.getId();
+            String id = selectedItem.getId();
             DatabaseReference ref = FirebaseDatabase
                     .getInstance()
                     .getReference("cartList")
                     .child(id);
             ref.removeValue();
             itemSelectedUpdate();
-            cartList.remove(position);
-            cartListRecyclerAdapter.notifyItemRemoved(position);
+
 
         }
     };
@@ -375,6 +378,21 @@ public class toBuyActivity extends AppCompatActivity {
     }
 
     private List<ToBuyItem> firebaseToBuyList(DataSnapshot dataSnapshot) {
+        List<ToBuyItem> list = new ArrayList<>();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            Map<String, Object> snapshotValue = (Map<String, Object>) snapshot.getValue();
+            ToBuyItem toBuyItem = new ToBuyItem(
+                    snapshotValue.get("name").toString(),
+                    Integer.parseInt(snapshotValue.get("quantity").toString()),
+                    (Boolean) snapshotValue.get("selected")
+            );
+            toBuyItem.setId(snapshotValue.get("id").toString());
+            list.add(toBuyItem);
+        }
+        return list;
+    }
+
+    private List<ToBuyItem> firebaseCartList(DataSnapshot dataSnapshot) {
         List<ToBuyItem> list = new ArrayList<>();
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
             Map<String, Object> snapshotValue = (Map<String, Object>) snapshot.getValue();
