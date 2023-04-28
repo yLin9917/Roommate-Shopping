@@ -29,6 +29,7 @@ public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecycl
      * @param list ToBuyItem list
      */
     public CartListRecyclerAdapter(Context context, List<ToBuyItem> list ) {
+
         this.context = context;
         this.list = list;
     }

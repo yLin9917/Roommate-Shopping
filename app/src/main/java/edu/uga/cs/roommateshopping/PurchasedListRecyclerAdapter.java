@@ -15,16 +15,16 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
 
     private final Context context;
-    private PurchasedItem item;
+    private List<PurchasedItem> list;
 
     /**
      * initialize the context and list
      * @param context context
-     * @param item ToBuyItem list
+     * @param purchasedItems ToBuyItem list
      */
-    public PurchasedListRecyclerAdapter(Context context, PurchasedItem item ) {
+    public PurchasedListRecyclerAdapter(Context context, List<PurchasedItem> purchasedItems ) {
         this.context = context;
-        this.item = item;
+        this.list = purchasedItems;
     }
 
     /**
@@ -56,27 +56,38 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
     @Override
     public void onBindViewHolder(@NonNull PurchasedListRecyclerAdapter.purchasedListHolder holder, int position) {
-        if (item != null) {
-            holder.boughtBy.setText("Bought by: " + item.getName());
-            holder.numOfPurchased.setText("Purchased #" + item.getPurchasedNum());
-            holder.itemList.setText(itemList());
-            holder.cost.setText(String.valueOf(item.getCost()));
-        }
+
+        PurchasedItem item = list.get(position);
+
+        holder.boughtBy.setText("Bought by: " + item.getName());
+        holder.numOfPurchased.setText("Purchased #" + ++position);
+        holder.itemList.setText(itemList(item));
+        holder.cost.setText(String.valueOf(item.getCost()));
+    }
+
+    /**
+     * setter method for list
+     * @param list list
+     */
+    public void setList(List<PurchasedItem> list) {
+        this.list = list;
     }
 
     @Override
     public int getItemCount() {
-        return 1;
+        if (list == null) return 0;
+        return list.size();
     }
 
-    private String itemList() {
-        List<ToBuyItem> items = item.getItems();
+    private String itemList(PurchasedItem item) {
+        List<String> items = item.getItems();
         String str = "";
         for (int i = 0; i < items.size() - 1; i++) {
-            str += items.get(i).getName() + ", ";
+            str += items.get(i) + ", ";
         }
-        str += items.get(items.size() - 1).getName();
+        str += items.get(items.size() - 1);
         return str;
     }
+
 
 }

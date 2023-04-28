@@ -1,29 +1,36 @@
 package edu.uga.cs.roommateshopping;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PurchasedItem implements Serializable {
 
+    private String id;
     String name;
     double cost;
-    List<ToBuyItem> items;
-    int purchasedNum;
-
+    List<String> itemNameList;
 
     /**
      * use to initialize the item
      * @param name item name
      * @param cost item cost
-     * @param items purchased items
-     * @param purchasedNum number of purchased
+     * @param itemNameList purchased items
      */
-    public PurchasedItem(String name, double cost, List<ToBuyItem> items, int purchasedNum) {
+    public PurchasedItem(String name, double cost, List<String> itemNameList) {
         this.name = name;
         this.cost = cost;
-        this.items = items;
-        this.purchasedNum = purchasedNum;
+        this.itemNameList = itemNameList;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -46,15 +53,20 @@ public class PurchasedItem implements Serializable {
      * return list of items
      * @return list of items
      */
-    public List<ToBuyItem> getItems() {
-        return items;
+    public List<String> getItems() {
+        return itemNameList;
     }
 
-    /**
-     * return number of purchased
-     * @return
-     */
-    public int getPurchasedNum() {
-        return purchasedNum;
+
+    @Override
+    public String toString() {
+        return "PurchasedItem{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", cost=" + cost +
+                ", itemNameList=" + itemNameList +
+                '}';
     }
+
+
 }

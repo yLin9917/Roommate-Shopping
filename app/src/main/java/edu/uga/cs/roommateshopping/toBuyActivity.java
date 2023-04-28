@@ -20,6 +20,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,10 +36,8 @@ public class toBuyActivity extends AppCompatActivity {
 
     private static final String TAG = "toBuyActivity";
 
-    int counter = 0;
     TextView itemSelected;
 
-    EditText itemName;
     Button addToCartButton, checkoutButton, toBuyHome;
     private static List<ToBuyItem> toBuyList, cartList, purchasedList;
     private RecyclerView toBuyListRecyclerView;
@@ -98,7 +97,7 @@ public class toBuyActivity extends AppCompatActivity {
         toBuyRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                 toBuyList = firebaseToBuyList(dataSnapshot);
+                toBuyList = firebaseToBuyList(dataSnapshot);
                 toBuyListRecycleAdapter.setData(toBuyList);
             }
 
@@ -154,7 +153,6 @@ public class toBuyActivity extends AppCompatActivity {
 
 
             Toast.makeText(toBuyActivity.this, "Items added to the cart", Toast.LENGTH_SHORT).show();
-//            itemSelectedUpdate();
         });
     }
 
@@ -242,13 +240,26 @@ public class toBuyActivity extends AppCompatActivity {
                 String price = ed.getText().toString();
                 String toastMess = "Please fill in the blank!";
                 if (price.length() != 0) {
+//                    purchasedList = new ArrayList<>();
+                    List<String> itemNameList = new ArrayList<>();
                     for (ToBuyItem item : selectedItems) {
-                        int position = cartList.indexOf(item);
-                        cartList.remove(position);
-                        purchasedList.add(item);
-                        cartListRecyclerAdapter.notifyItemRemoved(position);
+                        String id = item.getId();
+                        item.setSelected(false);
+                        // add selected item to the purchasedList
+                        itemNameList.add(item.getName().toString());
+
+                        // remove the selected item from the cartList and ref
+                        cartRef.child(id).removeValue();
+                        cartList.remove(item);
+
+                        cartListRecyclerAdapter.notifyDataSetChanged();
                     }
-                    PurchasedItem pi = new PurchasedItem("name", Double.parseDouble(price), purchasedList, counter++);
+                    itemSelectedUpdate();
+                    String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().trim();
+                    PurchasedItem pi = new PurchasedItem(name, Double.parseDouble(price), itemNameList);
+                    String uniqueId = purchasedRef.push().getKey();
+                    purchasedRef.child(uniqueId).setValue(pi);
+
                     Intent intent = new Intent(this, SettleActivity.class);
                     intent.putExtra("PurchasedItem", pi);
                     startActivity(intent);
@@ -361,6 +372,11 @@ public class toBuyActivity extends AppCompatActivity {
         toBuyList = (List<ToBuyItem>) savedInstanceState.getSerializable("toBuyList");
     }
 
+    /**
+     * initialize the list from datasnapshot
+     * @param dataSnapshot firebase's snapshot
+     * @return List<ToBuyItem>
+     */
     private List<ToBuyItem> firebaseToBuyList(DataSnapshot dataSnapshot) {
 
         List<ToBuyItem> list = new ArrayList<>();
