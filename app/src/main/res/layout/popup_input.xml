@@ -44,7 +44,7 @@
         android:maxLength="5"
         android:hint="item number"
         android:digits="0123456789"
-        android:inputType="phone" />
+        android:inputType="numberDecimal" />
 
     <LinearLayout
         android:layout_width="match_parent"

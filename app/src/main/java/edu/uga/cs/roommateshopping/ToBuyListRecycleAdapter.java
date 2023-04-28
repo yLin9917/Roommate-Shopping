@@ -28,7 +28,9 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
     public static final String DEBUG_TAG = "toBuyListRecycleAdapter";
 
     private OnSelectedItemsChangedListener onSelectedItemsChangedListener;
-
+    // create collection for the program
+    FirebaseDatabase db = FirebaseDatabase.getInstance();
+    DatabaseReference toBuyRef = db.getReference("toBuyList");
     private final Context context;
 
     private static List<ToBuyItem> list;
@@ -87,11 +89,37 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
     @Override
     public void onBindViewHolder(toBuyListHolder holder, int position) {
 
-
         ToBuyItem item = list.get(position);
+        String id = item.getId();
         holder.itemName.setText(item.getName());
         holder.checkBox.setChecked(item.isSelected());
         holder.itemQuantity.setText( item.getQuantity());
+
+        // set up the enter handler for the itemName EditText
+        holder.itemName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    String newContent = holder.itemName.getText().toString();
+                    toBuyRef.child(id).child("name").setValue(newContent);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        // set up the enter handler for the itemQuantity EditText
+        holder.itemQuantity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    String newContent = holder.itemQuantity.getText().toString();
+                    toBuyRef.child(id).child("quantity").setValue(newContent);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

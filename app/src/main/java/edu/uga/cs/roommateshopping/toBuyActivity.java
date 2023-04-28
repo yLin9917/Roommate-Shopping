@@ -37,6 +37,8 @@ public class toBuyActivity extends AppCompatActivity {
 
     int counter = 0;
     TextView itemSelected;
+
+    EditText itemName;
     Button addToCartButton, checkoutButton, toBuyHome;
     private static List<ToBuyItem> toBuyList, cartList, purchasedList;
     private RecyclerView toBuyListRecyclerView;
@@ -136,29 +138,23 @@ public class toBuyActivity extends AppCompatActivity {
 
             for (ToBuyItem item : selectedItems) {
                 String id = item.getId();
-
+                item.setSelected(false);
+                // add selected item to the cartList and ref
                 cartRef.child(id).setValue(item);
                 cartList.add(item);
                 cartListRecyclerAdapter.setData(cartList);
-
-
                 itemSelectedUpdate();
-            }
 
-            Log.d("999999", "cart: " + cartList.toString());
-
-
-            for (ToBuyItem item : cartList) {
-                String id = item.getId();
+                // remove the selected item from the toBuyList and ref
                 toBuyRef.child(id).removeValue();
                 toBuyList.remove(item);
+                toBuyListRecycleAdapter.notifyDataSetChanged();
+                cartListRecyclerAdapter.notifyDataSetChanged();
             }
-            toBuyListRecycleAdapter.notifyDataSetChanged();
 
 
             Toast.makeText(toBuyActivity.this, "Items added to the cart", Toast.LENGTH_SHORT).show();
 //            itemSelectedUpdate();
-            cartListRecyclerAdapter.notifyDataSetChanged();
         });
     }
 
@@ -298,11 +294,7 @@ public class toBuyActivity extends AppCompatActivity {
 
             // delete the item from firebase
             String id = selectedItem.getId();
-            DatabaseReference ref = FirebaseDatabase
-                    .getInstance()
-                    .getReference("toBuyList")
-                    .child(id);
-            ref.removeValue();
+            toBuyRef.child(id).removeValue();
             itemSelectedUpdate();
 
         }
@@ -321,31 +313,24 @@ public class toBuyActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            Toast.makeText(toBuyActivity.this, "Item added to the ToBuy list", Toast.LENGTH_SHORT).show();
             int position = viewHolder.getAdapterPosition();
-            ToBuyItem selectedItem = cartList.get(position);
+//            ToBuyItem selectedItem = cartList.get(position);
             ToBuyItem tempItem = cartList.get(position);
-            toBuyList.add(selectedItem);
-            selectedItem.setSelected(false);
+            toBuyList.add(tempItem);
+            tempItem.setSelected(false);
             toBuyListRecycleAdapter.notifyDataSetChanged();
 
             // add item to firebase toBuyList
-            String uniqueId = toBuyRef.push().getKey();
-            selectedItem.setId(uniqueId);
-            toBuyRef.child(uniqueId).setValue(selectedItem);
-            //double check if have problem, if there is, move line 316 to 325
+            String id = tempItem.getId();
+//            String uniqueId = toBuyRef.push().getKey();
+            tempItem.setId(id);
+            toBuyRef.child(id).setValue(tempItem);
 
             // delete the item from firebase cartList
-            String id = tempItem.getId();
-            DatabaseReference ref = FirebaseDatabase
-                    .getInstance()
-                    .getReference("cartList")
-                    .child(id);
-            ref.removeValue();
-            itemSelectedUpdate();
+            cartRef.child(id).removeValue();
             cartList.remove(position);
             cartListRecyclerAdapter.notifyItemRemoved(position);
-
+            Toast.makeText(toBuyActivity.this, "Item added to the ToBuy list", Toast.LENGTH_SHORT).show();
         }
     };
 
