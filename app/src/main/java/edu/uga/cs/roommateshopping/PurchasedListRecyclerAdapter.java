@@ -73,7 +73,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         String id = item.getId();
         holder.boughtBy.setText("Bought by: " + item.getName());
         holder.numOfPurchased.setText("Purchased #" + ++position);
-        holder.itemList.setText(itemList(item));
+        holder.itemList.setText(itemList(item.getName()));
         holder.cost.setText(String.format("%.2f", item.getCost()));
 
 

@@ -241,12 +241,14 @@ public class toBuyActivity extends AppCompatActivity {
                 String toastMess = "Please fill in the blank!";
                 if (price.length() != 0) {
 //                    purchasedList = new ArrayList<>();
-                    List<String> itemNameList = new ArrayList<>();
+                    List<ToBuyItem> itemNameList = new ArrayList<>();
                     for (ToBuyItem item : selectedItems) {
                         String id = item.getId();
+                        ToBuyItem temp = new ToBuyItem(item.getName(), item.getIntQuantity(), false, item.getId());
                         item.setSelected(false);
                         // add selected item to the purchasedList
-                        itemNameList.add(item.getName().toString());
+                        itemNameList.add(temp);
+                        //temp.setId(itemNameList.indexOf(temp) + "");
 
                         // remove the selected item from the cartList and ref
                         cartRef.child(id).removeValue();
