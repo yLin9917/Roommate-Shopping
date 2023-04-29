@@ -258,10 +258,11 @@ public class toBuyActivity extends AppCompatActivity {
                     String name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName().trim();
                     PurchasedItem pi = new PurchasedItem(name, Double.parseDouble(price), itemNameList);
                     String uniqueId = purchasedRef.push().getKey();
+                    pi.setId(uniqueId);
                     purchasedRef.child(uniqueId).setValue(pi);
+                    Log.d("999999", uniqueId);
 
                     Intent intent = new Intent(this, SettleActivity.class);
-                    intent.putExtra("PurchasedItem", pi);
                     startActivity(intent);
                 } else {
                     Toast.makeText(this, toastMess, Toast.LENGTH_SHORT).show();

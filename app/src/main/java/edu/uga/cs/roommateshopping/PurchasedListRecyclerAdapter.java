@@ -1,6 +1,7 @@
 package edu.uga.cs.roommateshopping;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,11 +76,12 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         holder.itemList.setText(itemList(item));
         holder.cost.setText(String.format("%.2f", item.getCost()));
 
+
         // set up the enter handler for the cost EditText
         holder.cost.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == android.view.KeyEvent.KEYCODE_ENTER) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                     if (holder.cost.getText().toString().equals("")) {
                         holder.cost.setText("1");
                     }
