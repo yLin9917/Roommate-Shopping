@@ -140,7 +140,7 @@ public class SettleActivity extends AppCompatActivity {
             PurchasedItem purchasedItem = new PurchasedItem(
                     snapshotValue.get("name").toString(),
                     Double.parseDouble(snapshotValue.get("cost").toString()),
-                    (List<String>)snapshotValue.get("items")
+                    (List<ToBuyItem>)snapshotValue.get("items")
             );
             purchasedItem.setId(snapshotValue.get("id").toString());
             list.add(purchasedItem);

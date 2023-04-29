@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/settle_card_view"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         app:cardBackgroundColor="#45B8C3"
         app:cardCornerRadius="20dp">
@@ -74,12 +74,16 @@
                 android:text="Item:"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/itemList"
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="95dp"
-                android:layout_weight="1"
-                android:text="TextView" />
+                android:layout_height="150dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/purchasedRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="116dp" />
+
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
