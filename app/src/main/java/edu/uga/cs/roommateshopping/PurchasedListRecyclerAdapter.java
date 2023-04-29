@@ -36,7 +36,9 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
     private static Context context = null;
     private List<PurchasedItem> list;
 
-    static List<ToBuyItem> cartList;
+    static List<ToBuyItem> itemList;
+
+    static long count = 0;
 
 
     private static RecyclerView purchasedRecyclerView;
@@ -57,7 +59,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
      */
     public static class purchasedListHolder extends RecyclerView.ViewHolder {
 
-        TextView boughtBy, numOfPurchased, itemList;
+        TextView boughtBy, numOfPurchased;
         EditText cost;
 
 
@@ -74,14 +76,37 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
 
             FirebaseDatabase db = FirebaseDatabase.getInstance();
-            DatabaseReference cartRef = db.getReference("cartList");
+//            DatabaseReference cartRef = db.getReference("cartList");
+//
+//            // add the eventListener for the cartRef
+//            cartRef.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    cartList = firebaseToBuyList(dataSnapshot);
+//                    cartListRecyclerAdapter.setData(cartList);
+//                }
+            DatabaseReference purchasedRef = db.getReference().child("purchasedList");
+            purchasedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    count = snapshot.getChildrenCount(); // Get the number of elements in "purchasedList"
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle the error
+                }
+            });
+
+            DatabaseReference itemRef = purchasedRef.child("-NUAE7EekyKPlkO1H7sf").child("items");
 
             // add the eventListener for the cartRef
-            cartRef.addValueEventListener(new ValueEventListener() {
+            itemRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    cartList = firebaseToBuyList(dataSnapshot);
-                    cartListRecyclerAdapter.setData(cartList);
+                    itemList = firebaseToBuyList(dataSnapshot);
+                    cartListRecyclerAdapter.setData(itemList);
                 }
 
                 @Override
@@ -99,7 +124,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
             });
 
 
-            cartListRecyclerAdapter = new CartListRecyclerAdapter(itemView.getContext(), cartList);
+            cartListRecyclerAdapter = new CartListRecyclerAdapter(itemView.getContext(), itemList);
             purchasedRecyclerView.setAdapter(cartListRecyclerAdapter);
             numOfPurchased = itemView.findViewById(R.id.numOfPurchased);
         }
