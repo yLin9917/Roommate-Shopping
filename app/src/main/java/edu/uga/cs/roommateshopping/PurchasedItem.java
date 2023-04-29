@@ -11,7 +11,7 @@ public class PurchasedItem implements Serializable {
     private String id;
     String name;
     double cost;
-    List<String> itemNameList;
+    List<ToBuyItem> itemNameList;
 
     /**
      * use to initialize the item
@@ -19,7 +19,7 @@ public class PurchasedItem implements Serializable {
      * @param cost item cost
      * @param itemNameList purchased items
      */
-    public PurchasedItem(String name, double cost, List<String> itemNameList) {
+    public PurchasedItem(String name, double cost, List<ToBuyItem> itemNameList) {
         this.name = name;
         this.cost = cost;
         this.itemNameList = itemNameList;
@@ -53,7 +53,7 @@ public class PurchasedItem implements Serializable {
      * return list of items
      * @return list of items
      */
-    public List<String> getItems() {
+    public List<ToBuyItem> getItems() {
         return itemNameList;
     }
 
