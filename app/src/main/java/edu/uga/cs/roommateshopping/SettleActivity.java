@@ -65,9 +65,6 @@ public class SettleActivity extends AppCompatActivity {
         purchasedListRecyclerView = findViewById(R.id.settleList);
         purchasedListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ItemTouchHelper purchasedTouchHelper = new ItemTouchHelper(purchasedListTouchCallback);
-        purchasedTouchHelper.attachToRecyclerView(purchasedListRecyclerView);
-
         purchasedListRecyclerView.setAdapter(purchasedListRecyclerAdapter);
 
         purchasedRef.addValueEventListener(new ValueEventListener() {
@@ -169,42 +166,5 @@ public class SettleActivity extends AppCompatActivity {
         recentlyTotal.setText("Total: $" + String.format("%.2f", total));
     }
 
-    /**
-     * A method to handle cartlist swipe, after the swipe, the item will be moved back to ToBuy list.
-     */
-    ItemTouchHelper.SimpleCallback purchasedListTouchCallback  = new ItemTouchHelper.SimpleCallback(0,
-            ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
-
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-            int position = viewHolder.getAdapterPosition();
-            PurchasedItem tempItem = purchasedItem.get(position);
-            Log.d("999999", tempItem.toString());
-//            toBuyList.add(tempItem);
-//            tempItem.setSelected(false);
-//            toBuyListRecycleAdapter.notifyDataSetChanged();
-//
-//            // add item to firebase toBuyList
-            String id = tempItem.getId();
-//            String uniqueId = purchasedRef.push().getKey();
-//            tempItem.setId(id);
-//            toBuyRef.child(id).setValue(tempItem);
-//
-//            // delete the item from firebase cartList
-//            purchasedRef.child(id).removeValue();
-//            cartList.remove(position);
-//            cartListRecyclerAdapter.notifyItemRemoved(position);
-
-//            Intent intent = new Intent(SettleActivity.this, toBuyActivity.class);
-//            startActivity(intent);
-
-            Toast.makeText(SettleActivity.this, "hello: " + id, Toast.LENGTH_SHORT).show();
-        }
-    };
 
 }

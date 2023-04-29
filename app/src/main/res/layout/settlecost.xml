@@ -7,7 +7,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/settle_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_margin="10dp"
         app:cardBackgroundColor="#45B8C3"
         app:cardCornerRadius="20dp">
@@ -74,15 +74,14 @@
                 android:text="Item:"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/itemList"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/purchasedItemCardView"
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/alfa_slab_one"
-                android:scrollbars="vertical"
-                android:textSize="24sp" />
+                android:layout_height="81dp"
+                android:layout_weight="1" />
 
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
+
 </LinearLayout>
