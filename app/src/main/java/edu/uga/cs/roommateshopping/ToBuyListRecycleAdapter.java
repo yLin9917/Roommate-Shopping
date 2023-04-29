@@ -113,6 +113,9 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if (holder.itemQuantity.getText().toString().equals("")) {
+                        holder.itemQuantity.setText("1");
+                    }
                     String newContent = holder.itemQuantity.getText().toString();
                     toBuyRef.child(id).child("quantity").setValue(newContent);
                     return true;

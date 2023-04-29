@@ -1,19 +1,29 @@
 package edu.uga.cs.roommateshopping;
 
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<PurchasedListRecyclerAdapter.purchasedListHolder> {
 
+    private ToBuyListRecycleAdapter.OnSelectedItemsChangedListener onSelectedItemsChangedListener;
 
+    FirebaseDatabase db = FirebaseDatabase.getInstance();
+    DatabaseReference purchasedRef = db.getReference("purchasedList");
     private final Context context;
     private List<PurchasedItem> list;
 
@@ -32,7 +42,8 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
      */
     public static class purchasedListHolder extends RecyclerView.ViewHolder {
 
-        TextView boughtBy, cost, numOfPurchased, itemList;
+        TextView boughtBy, numOfPurchased, itemList;
+        EditText cost;
 
         /**
          * initialize the elements
@@ -58,11 +69,27 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
     public void onBindViewHolder(@NonNull PurchasedListRecyclerAdapter.purchasedListHolder holder, int position) {
 
         PurchasedItem item = list.get(position);
-
+        String id = item.getId();
         holder.boughtBy.setText("Bought by: " + item.getName());
         holder.numOfPurchased.setText("Purchased #" + ++position);
         holder.itemList.setText(itemList(item));
-        holder.cost.setText(String.valueOf(item.getCost()));
+        holder.cost.setText(String.format("%.2f", item.getCost()));
+
+        // set up the enter handler for the cost EditText
+        holder.cost.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == android.view.KeyEvent.KEYCODE_ENTER) {
+                    if (holder.cost.getText().toString().equals("")) {
+                        holder.cost.setText("1");
+                    }
+                    String newContent = holder.cost.getText().toString();
+                    purchasedRef.child(id).child("cost").setValue(newContent);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
