@@ -151,72 +151,72 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText removeItemEditText = popupView.findViewById(R.id.removeItemEditText);
-                String removeItem = removeItemEditText.getText().toString();
-                DatabaseReference toBuyRef = db.getReference("toBuyList");
-                DatabaseReference purchasedRef = db.getReference("purchasedList");
-
-                List<ToBuyItem> items = new ArrayList<>();
-                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                    ToBuyItem item = itemSnapshot.getValue(ToBuyItem.class);
-                    item.setId(itemSnapshot.getKey());
-                    items.add(item);
-                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot: " + dataSnapshot);
-                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot children: " + dataSnapshot.getChildren());
-                    Log.d("item", "showEditItemPopup: " + items);
-                }
-
-                if (removeItem.equals("")) {
-                    Toast.makeText(context, "Please enter an item name", Toast.LENGTH_SHORT).show();
-                } else {
-                    String id = null;
-                    for (ToBuyItem toBuyItem : items) {
-                        if (toBuyItem.getName().equals(removeItem)) {
-                            Toast.makeText(context, "test: " + toBuyItem.getName(), Toast.LENGTH_SHORT).show();
-                            id = toBuyItem.getId();
-                            //add to toBuyList
-                            toBuyRef.child(id).setValue(toBuyItem);
-                            //remove from purchasedList
-                            purchasedRef.child(item.getId()).removeValue();
-                            break;
-                        }
-                    }
-                    if (id == null) {
-                        Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "Item removed from the purchased list", Toast.LENGTH_SHORT).show();
-                        popupWindow.dismiss();
-                    }
-                }
 //                EditText removeItemEditText = popupView.findViewById(R.id.removeItemEditText);
 //                String removeItem = removeItemEditText.getText().toString();
 //                DatabaseReference toBuyRef = db.getReference("toBuyList");
 //                DatabaseReference purchasedRef = db.getReference("purchasedList");
-//                List<ToBuyItem> items = item.getItems();
+//
+//                List<ToBuyItem> items = new ArrayList<>();
+//                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+//                    ToBuyItem item = itemSnapshot.getValue(ToBuyItem.class);
+//                    item.setId(itemSnapshot.getKey());
+//                    items.add(item);
+//                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot: " + dataSnapshot);
+//                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot children: " + dataSnapshot.getChildren());
+//                    Log.d("item", "showEditItemPopup: " + items);
+//                }
 //
 //                if (removeItem.equals("")) {
 //                    Toast.makeText(context, "Please enter an item name", Toast.LENGTH_SHORT).show();
 //                } else {
-//                    for (int i = 0; i < itemNameArray.length; i++) {
-//                        //Toast.makeText(context, "array =" + itemNameArray[i], Toast.LENGTH_SHORT).show();
-//                        if (itemNameArray[i].equals(removeItem)) {
+//                    String id = null;
+//                    for (ToBuyItem toBuyItem : items) {
+//                        if (toBuyItem.getName().equals(removeItem)) {
+//                            Toast.makeText(context, "test: " + toBuyItem.getName(), Toast.LENGTH_SHORT).show();
+//                            id = toBuyItem.getId();
 //                            //add to toBuyList
-//                            String id = items.get(i).getId();
-//                            ToBuyItem instance = items.get(i);
-//
-//                            toBuyRef.child(id).setValue(instance);
+//                            toBuyRef.child(id).setValue(toBuyItem);
 //                            //remove from purchasedList
-//                            items.remove(i);
+//                            purchasedRef.child(item.getId()).removeValue();
 //                            break;
-//                        } else if (i == items.size() - 1) {
-//                            Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
-//                            return;
 //                        }
 //                    }
-//                    purchasedRef.child(item.getId()).child("items").setValue(items);
-//                    itemList.setText(itemList(item));
-//                    popupWindow.dismiss();
+//                    if (id == null) {
+//                        Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(context, "Item removed from the purchased list", Toast.LENGTH_SHORT).show();
+//                        popupWindow.dismiss();
+//                    }
 //                }
+                EditText removeItemEditText = popupView.findViewById(R.id.removeItemEditText);
+                String removeItem = removeItemEditText.getText().toString();
+                DatabaseReference toBuyRef = db.getReference("toBuyList");
+                DatabaseReference purchasedRef = db.getReference("purchasedList");
+                List<ToBuyItem> items = item.getItems();
+                Log.d("PurchasedListRecyclerAd", "items " + items);
+                if (removeItem.equals("")) {
+                    Toast.makeText(context, "Please enter an item name", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (int i = 0; i < itemNameArray.length; i++) {
+                        //Toast.makeText(context, "array =" + itemNameArray[i], Toast.LENGTH_SHORT).show();
+                        if (itemNameArray[i].equals(removeItem)) {
+                            //add to toBuyList
+                            String id = items.get(i).getId();
+                            ToBuyItem instance = new ToBuyItem(items.get(i).getName(), items.get(i).getIntQuantity(), false, id);
+
+                            toBuyRef.child(id).setValue(instance);
+                            //remove from purchasedList
+                            items.remove(i);
+                            break;
+                        } else if (i == items.size() - 1) {
+                            Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                    purchasedRef.child(item.getId()).child("items").setValue(items);
+                    itemList.setText(itemList(item));
+                    popupWindow.dismiss();
+                }
             }
         });
         popupWindow.showAtLocation(itemList, Gravity.CENTER, 0, 0);
