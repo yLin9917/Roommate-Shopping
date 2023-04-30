@@ -85,35 +85,35 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 //                    cartList = firebaseToBuyList(dataSnapshot);
 //                    cartListRecyclerAdapter.setData(cartList);
 //                }
-            DatabaseReference purchasedRef = db.getReference().child("purchasedList");
-            purchasedRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    count = snapshot.getChildrenCount(); // Get the number of elements in "purchasedList"
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Handle the error
-                }
-            });
-
-            DatabaseReference itemRef = purchasedRef.child("-NUAE7EekyKPlkO1H7sf").child("items");
-
-            // add the eventListener for the cartRef
-            itemRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    itemList = firebaseToBuyList(dataSnapshot);
-                    cartListRecyclerAdapter.setData(itemList);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-//                    Log.e(TAG, "onCancelled", databaseError.toException());
-                }
-            });
+//            DatabaseReference purchasedRef = db.getReference().child("purchasedList");
+//            purchasedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    count = snapshot.getChildrenCount(); // Get the number of elements in "purchasedList"
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//                    // Handle the error
+//                }
+//            });
+//
+//            DatabaseReference itemRef = purchasedRef.child("-NUAE7EekyKPlkO1H7sf").child("items");
+//
+//            // add the eventListener for the cartRef
+//            itemRef.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    itemList = firebaseToBuyList(dataSnapshot);
+//                    cartListRecyclerAdapter.setData(itemList);
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+////                    Log.e(TAG, "onCancelled", databaseError.toException());
+//                }
+//            });
 
             purchasedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
