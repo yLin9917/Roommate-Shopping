@@ -38,9 +38,6 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
     static List<ToBuyItem> itemList;
 
-    static long count = 0;
-
-
     private static RecyclerView purchasedRecyclerView;
     private static CartListRecyclerAdapter cartListRecyclerAdapter;
 
@@ -52,6 +49,11 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
     public PurchasedListRecyclerAdapter(Context context, List<PurchasedItem> purchasedItems ) {
         this.context = context;
         this.list = purchasedItems;
+    }
+
+    public void setData(List<PurchasedItem> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     /**
@@ -73,33 +75,21 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
             cost = itemView.findViewById(R.id.cost);
             purchasedRecyclerView = itemView.findViewById(R.id.purchasedRecyclerView);
             purchasedRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-
-            FirebaseDatabase db = FirebaseDatabase.getInstance();
-//            DatabaseReference cartRef = db.getReference("cartList");
+            numOfPurchased = itemView.findViewById(R.id.numOfPurchased);
 //
-//            // add the eventListener for the cartRef
-//            cartRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    cartList = firebaseToBuyList(dataSnapshot);
-//                    cartListRecyclerAdapter.setData(cartList);
-//                }
+//            FirebaseDatabase db = FirebaseDatabase.getInstance();
+////            DatabaseReference cartRef = db.getReference("cartList");
+////
+////            // add the eventListener for the cartRef
+////            cartRef.addValueEventListener(new ValueEventListener() {
+////                @Override
+////                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+////                    cartList = firebaseToBuyList(dataSnapshot);
+////                    cartListRecyclerAdapter.setData(cartList);
+////                }
 //            DatabaseReference purchasedRef = db.getReference().child("purchasedList");
-//            purchasedRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    count = snapshot.getChildrenCount(); // Get the number of elements in "purchasedList"
 //
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                    // Handle the error
-//                }
-//            });
-//
-//            DatabaseReference itemRef = purchasedRef.child("-NUAE7EekyKPlkO1H7sf").child("items");
+//            DatabaseReference itemRef = purchasedRef.child(position.getId).child("items");
 //
 //            // add the eventListener for the cartRef
 //            itemRef.addValueEventListener(new ValueEventListener() {
@@ -114,19 +104,18 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 ////                    Log.e(TAG, "onCancelled", databaseError.toException());
 //                }
 //            });
-
-            purchasedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    return false;
-                }
-            });
-
-
-            cartListRecyclerAdapter = new CartListRecyclerAdapter(itemView.getContext(), itemList);
-            purchasedRecyclerView.setAdapter(cartListRecyclerAdapter);
-            numOfPurchased = itemView.findViewById(R.id.numOfPurchased);
+//
+//            purchasedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    v.getParent().requestDisallowInterceptTouchEvent(true);
+//                    return false;
+//                }
+//            });
+//
+//
+//            cartListRecyclerAdapter = new CartListRecyclerAdapter(itemView.getContext(), itemList);
+//            purchasedRecyclerView.setAdapter(cartListRecyclerAdapter);
         }
     }
 
@@ -146,6 +135,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         holder.numOfPurchased.setText("Purchased #" + ++position);
 //        holder.itemList.setText(itemList(item.getName()));
         holder.cost.setText(String.format("%.2f", item.getCost()));
+        PurchasedListRecyclerAdapter.purchasedRecyclerView.setAdapter(new CartListRecyclerAdapter(context, item.getItems()));
 
 
         // set up the enter handler for the cost EditText
