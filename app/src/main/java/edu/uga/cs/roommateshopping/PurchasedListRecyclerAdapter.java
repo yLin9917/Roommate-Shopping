@@ -2,17 +2,23 @@ package edu.uga.cs.roommateshopping;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,11 +46,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
     static List<ToBuyItem> itemList;
 
-    static long count = 0;
-
-
-    private static RecyclerView purchasedRecyclerView;
-    private static CartListRecyclerAdapter cartListRecyclerAdapter;
+    String[] itemNameArray;
 
     /**
      * initialize the context and list
@@ -63,7 +65,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
         TextView boughtBy, itemList, numOfPurchased;
         EditText cost;
-
+        Button editButton;
 
         /**
          * initialize the elements
@@ -74,62 +76,8 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
             boughtBy = itemView.findViewById(R.id.boughtBy);
             cost = itemView.findViewById(R.id.cost);
             itemList = itemView.findViewById(R.id.itemList);
-//            purchasedRecyclerView = itemView.findViewById(R.id.purchasedRecyclerView);
-//            purchasedRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-//
-
-//            FirebaseDatabase db = FirebaseDatabase.getInstance();
-////            DatabaseReference cartRef = db.getReference("cartList");
-////
-////            // add the eventListener for the cartRef
-////            cartRef.addValueEventListener(new ValueEventListener() {
-////                @Override
-////                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-////                    cartList = firebaseToBuyList(dataSnapshot);
-////                    cartListRecyclerAdapter.setData(cartList);
-////                }
-//            DatabaseReference purchasedRef = db.getReference().child("purchasedList");
-//            purchasedRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    count = snapshot.getChildrenCount(); // Get the number of elements in "purchasedList"
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                    // Handle the error
-//                }
-//            });
-//
-//            DatabaseReference itemRef = purchasedRef.child("-NUAE7EekyKPlkO1H7sf").child("items");
-//
-//            // add the eventListener for the cartRef
-//            itemRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    itemList = firebaseToBuyList(dataSnapshot);
-//                    cartListRecyclerAdapter.setData(itemList);
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError databaseError) {
-////                    Log.e(TAG, "onCancelled", databaseError.toException());
-//                }
-//            });
-//
-//            purchasedRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    v.getParent().requestDisallowInterceptTouchEvent(true);
-//                    return false;
-//                }
-//            });
-//
-//
-//            cartListRecyclerAdapter = new CartListRecyclerAdapter(itemView.getContext(), itemList);
-//            purchasedRecyclerView.setAdapter(cartListRecyclerAdapter);
             numOfPurchased = itemView.findViewById(R.id.numOfPurchased);
+            editButton = itemView.findViewById(R.id.editButton);
         }
     }
 
@@ -166,6 +114,112 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
                 return false;
             }
         });
+
+        // set up the click listener for the edit button
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                showEditItemPopup(item, holder.itemList, dataSnapshot);
+//            }
+            @Override
+            public void onClick(View v) {
+                purchasedRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        showEditItemPopup(item, holder.itemList, dataSnapshot);
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Database Error", error.getMessage());
+                    }
+                });
+            }
+        });
+    }
+
+    private void showEditItemPopup(PurchasedItem item, TextView itemList, DataSnapshot dataSnapshot) {
+        View popupView = LayoutInflater.from(context).inflate(R.layout.removepopup, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        Button removeButton = popupView.findViewById(R.id.removeButton);
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText removeItemEditText = popupView.findViewById(R.id.removeItemEditText);
+                String removeItem = removeItemEditText.getText().toString();
+                DatabaseReference toBuyRef = db.getReference("toBuyList");
+                DatabaseReference purchasedRef = db.getReference("purchasedList");
+
+                List<ToBuyItem> items = new ArrayList<>();
+                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                    ToBuyItem item = itemSnapshot.getValue(ToBuyItem.class);
+                    item.setId(itemSnapshot.getKey());
+                    items.add(item);
+                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot: " + dataSnapshot);
+                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot children: " + dataSnapshot.getChildren());
+                    Log.d("item", "showEditItemPopup: " + items);
+                }
+
+                if (removeItem.equals("")) {
+                    Toast.makeText(context, "Please enter an item name", Toast.LENGTH_SHORT).show();
+                } else {
+                    String id = null;
+                    for (ToBuyItem toBuyItem : items) {
+                        if (toBuyItem.getName().equals(removeItem)) {
+                            Toast.makeText(context, "test: " + toBuyItem.getName(), Toast.LENGTH_SHORT).show();
+                            id = toBuyItem.getId();
+                            //add to toBuyList
+                            toBuyRef.child(id).setValue(toBuyItem);
+                            //remove from purchasedList
+                            purchasedRef.child(item.getId()).removeValue();
+                            break;
+                        }
+                    }
+                    if (id == null) {
+                        Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Item removed from the purchased list", Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
+                    }
+                }
+//                EditText removeItemEditText = popupView.findViewById(R.id.removeItemEditText);
+//                String removeItem = removeItemEditText.getText().toString();
+//                DatabaseReference toBuyRef = db.getReference("toBuyList");
+//                DatabaseReference purchasedRef = db.getReference("purchasedList");
+//                List<ToBuyItem> items = item.getItems();
+//
+//                if (removeItem.equals("")) {
+//                    Toast.makeText(context, "Please enter an item name", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    for (int i = 0; i < itemNameArray.length; i++) {
+//                        //Toast.makeText(context, "array =" + itemNameArray[i], Toast.LENGTH_SHORT).show();
+//                        if (itemNameArray[i].equals(removeItem)) {
+//                            //add to toBuyList
+//                            String id = items.get(i).getId();
+//                            ToBuyItem instance = items.get(i);
+//
+//                            toBuyRef.child(id).setValue(instance);
+//                            //remove from purchasedList
+//                            items.remove(i);
+//                            break;
+//                        } else if (i == items.size() - 1) {
+//                            Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+//                    }
+//                    purchasedRef.child(item.getId()).child("items").setValue(items);
+//                    itemList.setText(itemList(item));
+//                    popupWindow.dismiss();
+//                }
+            }
+        });
+        popupWindow.showAtLocation(itemList, Gravity.CENTER, 0, 0);
     }
 
     /**
@@ -200,7 +254,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
             itemNames.add(itemName);
         }
 
-        String[] itemNameArray = itemNames.toArray(new String[0]);
+        itemNameArray = itemNames.toArray(new String[0]);
         String names = "";
         for (int i = 0; i < itemNameArray.length - 1; i++) {
             names += itemNameArray[i] + ", ";

@@ -3,22 +3,17 @@ package edu.uga.cs.roommateshopping;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +28,7 @@ import java.util.Map;
 public class SettleActivity extends AppCompatActivity {
 
     List<PurchasedItem> purchasedItem;
-    Button settleViewList, settleButton;
+    Button settleViewList, settleButton, editButton;
     RecyclerView purchasedListRecyclerView;
     PurchasedListRecyclerAdapter purchasedListRecyclerAdapter;
     FirebaseDatabase db = FirebaseDatabase.getInstance();
