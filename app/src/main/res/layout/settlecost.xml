@@ -7,7 +7,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/settle_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="243dp"
         android:layout_margin="10dp"
         app:cardBackgroundColor="#45B8C3"
         app:cardCornerRadius="20dp">
@@ -71,19 +71,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/acme"
-                android:text="Item:"
+                android:text="Item(s):"
                 android:textSize="20sp" />
 
-            <androidx.core.widget.NestedScrollView
+            <TextView
+                android:id="@+id/itemList"
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="72dp"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textSize="16sp" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/purchasedRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="116dp" />
-
-            </androidx.core.widget.NestedScrollView>
+            <Button
+                android:id="@+id/editButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edit Items" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
