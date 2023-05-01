@@ -136,6 +136,7 @@ public class toBuyActivity extends AppCompatActivity {
             }
 
             for (ToBuyItem item : selectedItems) {
+
                 String id = item.getId();
                 item.setSelected(false);
                 // add selected item to the cartList and ref

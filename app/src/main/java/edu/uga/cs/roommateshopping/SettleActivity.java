@@ -28,7 +28,7 @@ import java.util.Map;
 public class SettleActivity extends AppCompatActivity {
 
     List<PurchasedItem> purchasedItem;
-    Button settleViewList, settleButton, editButton;
+    Button settleViewList, settleButton;
     RecyclerView purchasedListRecyclerView;
     PurchasedListRecyclerAdapter purchasedListRecyclerAdapter;
     FirebaseDatabase db = FirebaseDatabase.getInstance();

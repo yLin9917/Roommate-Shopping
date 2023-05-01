@@ -22,12 +22,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -37,23 +39,20 @@ import java.util.regex.Pattern;
 
 public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<PurchasedListRecyclerAdapter.purchasedListHolder> {
 
-    private ToBuyListRecycleAdapter.OnSelectedItemsChangedListener onSelectedItemsChangedListener;
-
     FirebaseDatabase db = FirebaseDatabase.getInstance();
     DatabaseReference purchasedRef = db.getReference("purchasedList");
     private static Context context = null;
     private List<PurchasedItem> list;
 
-    static List<ToBuyItem> itemList;
-
     String[] itemNameArray;
 
     /**
      * initialize the context and list
-     * @param context context
+     *
+     * @param context        context
      * @param purchasedItems ToBuyItem list
      */
-    public PurchasedListRecyclerAdapter(Context context, List<PurchasedItem> purchasedItems ) {
+    public PurchasedListRecyclerAdapter(Context context, List<PurchasedItem> purchasedItems) {
         this.context = context;
         this.list = purchasedItems;
     }
@@ -69,6 +68,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
         /**
          * initialize the elements
+         *
          * @param itemView view
          */
         public purchasedListHolder(@NonNull View itemView) {
@@ -98,7 +98,6 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         holder.itemList.setText(itemList(item));
         holder.cost.setText(String.format("%.2f", item.getCost()));
 
-
         // set up the enter handler for the cost EditText
         holder.cost.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -117,11 +116,6 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
         // set up the click listener for the edit button
         holder.editButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                showEditItemPopup(item, holder.itemList, dataSnapshot);
-//            }
             @Override
             public void onClick(View v) {
                 purchasedRef.addValueEventListener(new ValueEventListener() {
@@ -151,72 +145,56 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                EditText removeItemEditText = popupView.findViewById(R.id.removeItemEditText);
-//                String removeItem = removeItemEditText.getText().toString();
-//                DatabaseReference toBuyRef = db.getReference("toBuyList");
-//                DatabaseReference purchasedRef = db.getReference("purchasedList");
-//
-//                List<ToBuyItem> items = new ArrayList<>();
-//                for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-//                    ToBuyItem item = itemSnapshot.getValue(ToBuyItem.class);
-//                    item.setId(itemSnapshot.getKey());
-//                    items.add(item);
-//                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot: " + dataSnapshot);
-//                    Log.d("PurchasedListRecyclerAd", "showEditItemPopup dataSnapshot children: " + dataSnapshot.getChildren());
-//                    Log.d("item", "showEditItemPopup: " + items);
-//                }
-//
-//                if (removeItem.equals("")) {
-//                    Toast.makeText(context, "Please enter an item name", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    String id = null;
-//                    for (ToBuyItem toBuyItem : items) {
-//                        if (toBuyItem.getName().equals(removeItem)) {
-//                            Toast.makeText(context, "test: " + toBuyItem.getName(), Toast.LENGTH_SHORT).show();
-//                            id = toBuyItem.getId();
-//                            //add to toBuyList
-//                            toBuyRef.child(id).setValue(toBuyItem);
-//                            //remove from purchasedList
-//                            purchasedRef.child(item.getId()).removeValue();
-//                            break;
-//                        }
-//                    }
-//                    if (id == null) {
-//                        Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(context, "Item removed from the purchased list", Toast.LENGTH_SHORT).show();
-//                        popupWindow.dismiss();
-//                    }
-//                }
+
                 EditText removeItemEditText = popupView.findViewById(R.id.removeItemEditText);
-                String removeItem = removeItemEditText.getText().toString();
+                String removeItem = removeItemEditText.getText().toString().trim();
                 DatabaseReference toBuyRef = db.getReference("toBuyList");
                 DatabaseReference purchasedRef = db.getReference("purchasedList");
-                List<ToBuyItem> items = item.getItems();
-                Log.d("PurchasedListRecyclerAd", "items " + items);
-                if (removeItem.equals("")) {
-                    Toast.makeText(context, "Please enter an item name", Toast.LENGTH_SHORT).show();
-                } else {
-                    for (int i = 0; i < itemNameArray.length; i++) {
-                        //Toast.makeText(context, "array =" + itemNameArray[i], Toast.LENGTH_SHORT).show();
-                        if (itemNameArray[i].equals(removeItem)) {
-                            //add to toBuyList
-                            String id = items.get(i).getId();
-                            ToBuyItem instance = new ToBuyItem(items.get(i).getName(), items.get(i).getIntQuantity(), false, id);
+                Query query = purchasedRef.child(item.getId()).child("items").orderByChild("name").equalTo(removeItem);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                            String uniqueId = toBuyRef.push().getKey();
+                            Map<String, Object> snapshotValue = (Map<String, Object>) itemSnapshot.getValue();
+                            ToBuyItem toBuyItem = new ToBuyItem(
+                                    snapshotValue.get("name").toString(),
+                                    Integer.parseInt(snapshotValue.get("quantity").toString()),
+                                    (Boolean) snapshotValue.get("selected"),
+                                    uniqueId
+                            );
+                            toBuyRef.child(uniqueId).setValue(toBuyItem);
 
-                            toBuyRef.child(id).setValue(instance);
-                            //remove from purchasedList
-                            items.remove(i);
-                            break;
-                        } else if (i == items.size() - 1) {
-                            Toast.makeText(context, "Item not found", Toast.LENGTH_SHORT).show();
-                            return;
+                            itemSnapshot.getRef().removeValue();
+                        }
+                        popupWindow.dismiss();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+//                        Log.e(TAG, "onCancelled", databaseError.toException());
+                    }
+                });
+
+                ValueEventListener listener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getChildrenCount() == 0) {
+                            purchasedRef.child(item.getId()).removeValue();
+                            popupWindow.dismiss();
+                            purchasedRef.child(item.getId()).child("items").removeEventListener(this);
                         }
                     }
-                    purchasedRef.child(item.getId()).child("items").setValue(items);
-                    itemList.setText(itemList(item));
-                    popupWindow.dismiss();
-                }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+                purchasedRef.child(item.getId()).child("items").addValueEventListener(listener);
+
+                itemList.setText(itemList(item));
+                popupWindow.dismiss();
+
             }
         });
         popupWindow.showAtLocation(itemList, Gravity.CENTER, 0, 0);
@@ -224,6 +202,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
     /**
      * setter method for list
+     *
      * @param list list
      */
     public void setList(List<PurchasedItem> list) {
@@ -238,6 +217,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
     private String itemList(PurchasedItem item) {
         List<ToBuyItem> items = item.getItems();
+        if (items == null) return null;
         String str = "";
         for (int i = 0; i < items.size() - 1; i++) {
             str += items.get(i) + ", ";
@@ -263,20 +243,22 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
         return names;
     }
-private static List<ToBuyItem> firebaseToBuyList(DataSnapshot dataSnapshot) {
 
-    List<ToBuyItem> list = new ArrayList<>();
-    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-        Map<String, Object> snapshotValue = (Map<String, Object>) snapshot.getValue();
-        ToBuyItem toBuyItem = new ToBuyItem(
-                snapshotValue.get("name").toString(),
-                Integer.parseInt(snapshotValue.get("quantity").toString()),
-                (Boolean) snapshotValue.get("selected")
-        );
-        toBuyItem.setId(snapshotValue.get("id").toString());
-        list.add(toBuyItem);
-    }
-    return list;
-}
+//    private static List<ToBuyItem> firebaseToBuyList(DataSnapshot dataSnapshot) {
+//
+//        List<ToBuyItem> list = new ArrayList<>();
+//        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//            Map<String, Object> snapshotValue = (Map<String, Object>) snapshot.getValue();
+//            ToBuyItem toBuyItem = new ToBuyItem(
+//                    snapshotValue.get("name").toString(),
+//                    Integer.parseInt(snapshotValue.get("quantity").toString()),
+//                    (Boolean) snapshotValue.get("selected")
+//            );
+//            toBuyItem.setId(snapshotValue.get("id").toString());
+//            list.add(toBuyItem);
+//        }
+//        return list;
+//    }
+
 
 }
