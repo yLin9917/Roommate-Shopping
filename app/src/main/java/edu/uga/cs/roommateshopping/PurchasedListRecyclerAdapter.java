@@ -167,6 +167,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
                             itemSnapshot.getRef().removeValue();
                         }
+                        Toast.makeText(context, "Item removed from the purchased list", Toast.LENGTH_SHORT).show();
                         popupWindow.dismiss();
                     }
 
@@ -193,11 +194,13 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
                 purchasedRef.child(item.getId()).child("items").addValueEventListener(listener);
 
                 itemList.setText(itemList(item));
-                popupWindow.dismiss();
+                //popupWindow.dismiss();
 
             }
+
         });
         popupWindow.showAtLocation(itemList, Gravity.CENTER, 0, 0);
+
     }
 
     /**
