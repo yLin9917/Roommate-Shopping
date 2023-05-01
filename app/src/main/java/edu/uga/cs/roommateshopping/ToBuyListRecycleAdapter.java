@@ -79,6 +79,12 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
         }
     }
 
+    /**
+     * create the view holder
+     * @param parent parent
+     * @param viewType viewType
+     * @return the view holder
+     */
     @NonNull
     @Override
     public toBuyListHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -86,6 +92,11 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
         return new toBuyListHolder(view);
     }
 
+    /**
+     * bind the view holder
+     * @param holder holder
+     * @param position position
+     */
     @Override
     public void onBindViewHolder(toBuyListHolder holder, int position) {
 
@@ -124,6 +135,7 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
             }
         });
 
+        // set up the checkbox listener
         holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -150,6 +162,10 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
         return selectedItems;
     }
 
+    /**
+     * Return the number of items in the list
+     * @return the number of items in the list
+     */
     @Override
     public int getItemCount() {
         if( list != null )
@@ -157,7 +173,6 @@ public class ToBuyListRecycleAdapter extends RecyclerView.Adapter<ToBuyListRecyc
         else
             return 0;
     }
-
 
     /**
      * Sets an {@link OnSelectedItemsChangedListener} to be notified when the selected items change.

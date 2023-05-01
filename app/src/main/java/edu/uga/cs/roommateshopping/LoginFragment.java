@@ -21,6 +21,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * LoginFragment is the fragment that handles the login process
+ */
 public class LoginFragment extends Fragment {
 
     private FirebaseAuth mAuth;
@@ -35,18 +38,38 @@ public class LoginFragment extends Fragment {
 
     }
 
+    /**
+     * Create a new instance of LoginFragment
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment LoginFragment.
+     */
     public static LoginFragment newInstance(String param1, String param2) {
         LoginFragment fragment = new LoginFragment();
 
         return fragment;
     }
 
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * onCreateView method
+     *
+     * @param inflater           the layout inflater
+     * @param container          the view group container
+     * @param savedInstanceState the saved instance state
+     * @return the view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,6 +77,12 @@ public class LoginFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
+    /**
+     * onViewCreated method
+     *
+     * @param view               the view
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -102,6 +131,11 @@ public class LoginFragment extends Fragment {
         transaction.commit();
     }
 
+    /**
+     * onSavedInstanceState method
+     *
+     * @param outState the saved instance state
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);

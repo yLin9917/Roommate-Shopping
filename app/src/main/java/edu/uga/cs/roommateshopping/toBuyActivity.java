@@ -52,13 +52,14 @@ public class toBuyActivity extends AppCompatActivity {
     DatabaseReference cartRef = db.getReference("cartList");
     DatabaseReference purchasedRef = db.getReference("purchasedList");
 
+    /**
+     * on create method for the toBuyActivity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_buy);
-
-//        purchasedRef.setValue(purchasedList);
-//        cartRef.setValue(cartList);
 
         // set up the adapter and recyclerview for the cartList
         cartListRecyclerView = findViewById(R.id.cartList);
@@ -361,6 +362,10 @@ public class toBuyActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * on save instance state method
+     * @param outState
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -369,6 +374,10 @@ public class toBuyActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * on restore instance state method
+     * @param savedInstanceState
+     */
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);

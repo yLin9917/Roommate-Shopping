@@ -13,6 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * This class is the adapter for the cart list
+ *
+ * It is used to display the cart list
+ */
 public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecyclerAdapter.cartListHolder>{
 
     public static final String DEBUG_TAG = "CartListRecyclerAdapter";
@@ -60,6 +66,12 @@ public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecycl
         }
     }
 
+    /**
+     * create the view holder
+     * @param parent parent
+     * @param viewType viewType
+     * @return the view holder
+     */
     @NonNull
     @Override
     public CartListRecyclerAdapter.cartListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,7 +79,12 @@ public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecycl
         return new cartListHolder(view);
     }
 
-
+    /**
+     * bind the view holder
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *        item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull CartListRecyclerAdapter.cartListHolder holder, int position) {
 
@@ -76,6 +93,10 @@ public class CartListRecyclerAdapter extends RecyclerView.Adapter<CartListRecycl
         holder.cartItemQuantity.setText(item.getQuantity());
     }
 
+    /**
+     * Return the size of the list
+     * @return the size of the list
+     */
     @Override
     public int getItemCount() {
         if (list == null) return 0;

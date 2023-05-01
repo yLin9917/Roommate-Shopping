@@ -25,10 +25,18 @@ public class PurchasedItem implements Serializable {
         this.itemNameList = itemNameList;
     }
 
+    /**
+     * get item id
+     * @return item id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * set item id
+     * @param id item id
+     */
     public void setId(String id) {
         this.id = id;
     }
@@ -57,7 +65,10 @@ public class PurchasedItem implements Serializable {
         return itemNameList;
     }
 
-
+    /**
+     * to string method
+     * @return string
+     */
     @Override
     public String toString() {
         return "PurchasedItem{" +

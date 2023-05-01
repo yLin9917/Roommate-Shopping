@@ -39,17 +39,34 @@ public class RegisterFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
+    /**
+     * Create a new instance of this fragment
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment RegisterFragment.
+     */
     public static RegisterFragment newInstance(String param1, String param2) {
         RegisterFragment fragment = new RegisterFragment();;
         return fragment;
     }
 
+    /**
+     * onCreate method
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * onCreateView method
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +74,11 @@ public class RegisterFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_register, container, false);
     }
 
+    /**
+     * onViewCreated method
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -93,7 +115,7 @@ public class RegisterFragment extends Fragment {
     }
 
     /**
-     * change the framelayout's fragment
+     * change the frame layout's fragment
      *
      * @param fragment the new fragment
      */

@@ -29,12 +29,22 @@ public class LoggedFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
+    /**
+     * Create a new instance of this fragment
+     *
+     * @return A new instance of fragment LoggedFragment.
+     */
     public static LoggedFragment newInstance(String param1, String param2) {
         LoggedFragment fragment = new LoggedFragment();
 
         return fragment;
     }
 
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +55,14 @@ public class LoggedFragment extends Fragment {
         }
     }
 
+    /**
+     * onCreateView method
+     *
+     * @param inflater           the inflater
+     * @param container          the container
+     * @param savedInstanceState the saved instance state
+     * @return the view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,6 +70,12 @@ public class LoggedFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_logged, container, false);
     }
 
+    /**
+     * onViewCreated method
+     *
+     * @param view               the view
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

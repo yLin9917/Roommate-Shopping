@@ -31,20 +31,41 @@ public class ToBuyItem implements Serializable {
         this.isSelected = false;
     }
 
+    /**
+     * getter for id
+     * @return id
+     */
     public String getId() {
         return this.id;
     }
 
+    /**
+     * setter for id
+     * @param id id
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * constructor
+     * @param name item name
+     * @param quantity item quantity
+     * @param selected item selected
+     */
     public ToBuyItem(String name, int quantity, Boolean selected) {
         this.name = name;
         this.quantity = quantity;
         this.isSelected = selected;
     }
 
+    /**
+     * constructor
+     * @param name item name
+     * @param quantity item quantity
+     * @param selected item selected
+     * @param id item id
+     */
     public ToBuyItem(String name, int quantity, Boolean selected, String id) {
         this.name = name;
         this.quantity = quantity;
@@ -78,10 +99,18 @@ public class ToBuyItem implements Serializable {
         return name;
     }
 
+    /**
+     * set name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * set quantity
+     * @param quantity
+     */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -102,6 +131,10 @@ public class ToBuyItem implements Serializable {
         isSelected = selected;
     }
 
+    /**
+     * override toString method
+     * @return string
+     */
     @Override
     public String toString() {
         return "ToBuyItem{" +

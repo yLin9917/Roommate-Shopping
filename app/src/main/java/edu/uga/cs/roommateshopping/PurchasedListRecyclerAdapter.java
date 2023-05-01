@@ -81,6 +81,11 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         }
     }
 
+    /**
+     * on create view holder
+     * @param parent parent
+     * @param viewType viewType
+     */
     @NonNull
     @Override
     public PurchasedListRecyclerAdapter.purchasedListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -88,6 +93,11 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         return new purchasedListHolder(view);
     }
 
+    /**
+     * on bind view holder
+     * @param holder holder
+     * @param position position
+     */
     @Override
     public void onBindViewHolder(@NonNull PurchasedListRecyclerAdapter.purchasedListHolder holder, int position) {
 
@@ -100,6 +110,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
         // set up the enter handler for the cost EditText
         holder.cost.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            // if the user presses enter, update the cost
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
@@ -132,6 +143,12 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         });
     }
 
+    /**
+     * show the popup window for editing the item list
+     * @param item current item
+     * @param itemList item list
+     * @param dataSnapshot data snapshot
+     */
     private void showEditItemPopup(PurchasedItem item, TextView itemList, DataSnapshot dataSnapshot) {
         View popupView = LayoutInflater.from(context).inflate(R.layout.removepopup, null);
 
@@ -143,6 +160,7 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
         Button removeButton = popupView.findViewById(R.id.removeButton);
         removeButton.setOnClickListener(new View.OnClickListener() {
+            // if the user presses the remove button, remove the item from list and add to ToBuyList
             @Override
             public void onClick(View view) {
 
@@ -212,12 +230,23 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
         this.list = list;
     }
 
+    /**
+     * getter method for item array size
+     *
+     * @return list size
+     */
     @Override
     public int getItemCount() {
         if (list == null) return 0;
         return list.size();
     }
 
+    /**
+     * getting the item array from the PurchasedItem object
+     *
+     * @param item PurchasedItem object
+     * @return names string of item names
+     */
     private String itemList(PurchasedItem item) {
         List<ToBuyItem> items = item.getItems();
         if (items == null) return null;
@@ -246,22 +275,5 @@ public class PurchasedListRecyclerAdapter extends RecyclerView.Adapter<Purchased
 
         return names;
     }
-
-//    private static List<ToBuyItem> firebaseToBuyList(DataSnapshot dataSnapshot) {
-//
-//        List<ToBuyItem> list = new ArrayList<>();
-//        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//            Map<String, Object> snapshotValue = (Map<String, Object>) snapshot.getValue();
-//            ToBuyItem toBuyItem = new ToBuyItem(
-//                    snapshotValue.get("name").toString(),
-//                    Integer.parseInt(snapshotValue.get("quantity").toString()),
-//                    (Boolean) snapshotValue.get("selected")
-//            );
-//            toBuyItem.setId(snapshotValue.get("id").toString());
-//            list.add(toBuyItem);
-//        }
-//        return list;
-//    }
-
 
 }

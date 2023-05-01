@@ -25,16 +25,33 @@ public class SplashFragment extends Fragment {
 
     }
 
+    /**
+     * Create a new instance of the fragment
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SplashFragment.
+     */
     public static SplashFragment newInstance(String param1, String param2) {
         SplashFragment fragment = new SplashFragment();
         return fragment;
     }
 
+    /**
+     * Called when the fragment is created, initialize the fragment's state
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Called when the fragment's view is created, initialize the fragment's view
+     * @param inflater the layout inflater
+     * @param container the view group container
+     * @param savedInstanceState the saved instance state
+     * @return the fragment's view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +59,11 @@ public class SplashFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_splash, container, false);
     }
 
+    /**
+     * Called when the fragment's view is created, initialize the fragment's view
+     * @param view the fragment's view
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -91,7 +113,7 @@ public class SplashFragment extends Fragment {
     }
 
     /**
-     * change the framelayout's fragment
+     * change the frame layout's fragment
      *
      * @param fragment the new fragment
      */

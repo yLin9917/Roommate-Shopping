@@ -40,6 +40,10 @@ public class SettleActivity extends AppCompatActivity {
     double roommate1 = 0;
     double roommate2 = 0;
 
+    /**
+     * initialize the activity, on create method
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,9 @@ public class SettleActivity extends AppCompatActivity {
 
         purchasedListRecyclerView.setAdapter(purchasedListRecyclerAdapter);
 
+        /**
+         * add listener to the database
+         */
         purchasedRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -79,6 +86,9 @@ public class SettleActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * handler for the SETTLE button, to show the popup window
+     */
     private void settleButtonHandler() {
 
         View popupView = getLayoutInflater().inflate(R.layout.settlepopup, null);
@@ -88,6 +98,7 @@ public class SettleActivity extends AppCompatActivity {
         TextView settleRoomate2 = popupView.findViewById(R.id.settleRoomate2);
         Button finalSettleButton = popupView.findViewById(R.id.finalSettleButton);
 
+        //add listener to the button
         settleButton.setOnClickListener(e -> {
             settleRoomate1.setText("Lin: $" + String.format("%.2f", roommate1));
             settleRoomate2.setText("Anna: $" + String.format("%.2f", roommate2));
@@ -103,6 +114,7 @@ public class SettleActivity extends AppCompatActivity {
             popupView.setBackground(ContextCompat.getDrawable(this, R.drawable.popupstyle));
             popupWindow.showAtLocation(settleButton, Gravity.CENTER, 0, 0);
 
+            // dismiss the popup window when touched, and remove the data from the database
             finalSettleButton.setOnClickListener(ee -> {
                 purchasedRef.removeValue();
                 popupWindow.dismiss();
